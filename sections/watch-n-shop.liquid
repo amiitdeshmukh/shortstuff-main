@@ -109,19 +109,14 @@
 
     .watch-shop-grid {
       display: flex;
-      grid-template-columns: none;
       gap: 15px;
       overflow-x: auto;
       overflow-y: visible;
-      flex-wrap: nowrap;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      margin: 0 -20px;
-      padding: 0 20px 0 20px;
       scroll-snap-type: x mandatory;
-      width: auto;
-      box-sizing: border-box;
+      scrollbar-width: none;
+      padding: 0 calc(50vw - ({{ section.settings.card_width_mobile }}px / 2));
     }
 
     .watch-shop-grid::-webkit-scrollbar {
@@ -131,15 +126,8 @@
     .watch-shop-card {
       flex: 0 0 {{ section.settings.card_width_mobile }}px;
       width: {{ section.settings.card_width_mobile }}px;
-      scroll-snap-align: start;
-    }
-
-    .watch-shop-card:first-child {
-      margin-left: 0;
-    }
-
-    .watch-shop-card:last-child {
-      margin-right: 0;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
     }
 
     .watch-shop-media {
