@@ -307,6 +307,8 @@
       src="{{ section.settings.leaf_icon_1 | image_url: width: 200 }}"
       alt="Decorative leaf 1"
       class="static-leaf-1"
+      width="200"
+      height="200"
       loading="lazy"
     >
   {% endif %}
@@ -316,6 +318,8 @@
       src="{{ section.settings.leaf_icon_2 | image_url: width: 200 }}"
       alt="Decorative leaf 2"
       class="static-leaf-2"
+      width="200"
+      height="200"
       loading="lazy"
     >
   {% endif %}
@@ -325,6 +329,8 @@
       src="{{ section.settings.sun_icon | image_url: width: 300 }}"
       alt="Sun decoration"
       class="static-sun"
+      width="300"
+      height="300"
       loading="lazy"
     >
   {% endif %}
@@ -378,6 +384,8 @@
                   src="{{ block.settings.image | image_url: width: 700 }}"
                   alt="{{ block.settings.image.alt | default: 'Instagram photo' }}"
                   class="instagram-gallery-image"
+                  width="700"
+                  height="700"
                   loading="lazy"
                 >
               </a>
@@ -386,6 +394,8 @@
                 src="{{ block.settings.image | image_url: width: 700 }}"
                 alt="{{ block.settings.image.alt | default: 'Instagram photo' }}"
                 class="instagram-gallery-image"
+                width="700"
+                height="700"
                 loading="lazy"
               >
             {% endif %}
@@ -402,6 +412,76 @@
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  'use strict';
+  
+  function animateCounter(element, target, duration) {
+    var start = 0;
+    var startTime = null;
+    
+    function updateCounter(currentTime) {
+      if (!startTime) startTime = currentTime;
+      var progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      // Easing function for smooth animation
+      var easeOutQuad = progress * (2 - progress);
+      var currentValue = Math.floor(start + (target - start) * easeOutQuad);
+      
+      element.textContent = currentValue.toLocaleString();
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      } else {
+        element.textContent = target.toLocaleString();
+      }
+    }
+    
+    requestAnimationFrame(updateCounter);
+  }
+  
+  function initCounterAnimation() {
+    var counterElement = document.querySelector('.instagram-count');
+    if (!counterElement) return;
+    
+    var targetValue = counterElement.textContent.replace(/,/g, '');
+    targetValue = parseInt(targetValue, 10);
+    
+    if (isNaN(targetValue)) return;
+    
+    // Set initial value to 0
+    counterElement.textContent = '0';
+    
+    // Check if IntersectionObserver is supported
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !counterElement.classList.contains('animated')) {
+            counterElement.classList.add('animated');
+            animateCounter(counterElement, targetValue, 2000); // 2 second animation
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.5 // Trigger when 50% of element is visible
+      });
+      
+      observer.observe(counterElement);
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      animateCounter(counterElement, targetValue, 2000);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCounterAnimation);
+  } else {
+    initCounterAnimation();
+  }
+})();
+</script>
 
 {% schema %}
 {
