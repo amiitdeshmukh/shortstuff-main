@@ -4,6 +4,7 @@
     padding-top: {{ section.settings.section_padding_top }}px;
     padding-bottom: {{ section.settings.section_padding_bottom }}px;
     position: relative;
+    overflow-x: hidden;
   }
 
   .watch-shop-container {
@@ -89,12 +90,15 @@
   /* Mobile - Horizontal Scroll */
   @media screen and (max-width: 768px) {
     .watch-shop-container {
-      padding: 0 20px;
+      padding: 0;
+      max-width: 100vw;
+      overflow: hidden;
     }
 
     .watch-shop-title {
       font-size: {{ section.settings.title_size | times: 0.7 }}px;
       margin-bottom: {{ section.settings.title_margin_bottom_mobile }}px;
+      padding: 0 20px;
     }
 
     .watch-shop-grid {
@@ -109,6 +113,7 @@
       scrollbar-width: none;
       padding: 0 20px 20px 20px;
       scroll-snap-type: x mandatory;
+      margin: 0;
     }
 
     .watch-shop-grid::-webkit-scrollbar {
@@ -168,6 +173,8 @@
               <img
                 src="{{ block.settings.image | image_url: width: 700 }}"
                 alt="{{ block.settings.image.alt | default: 'Product video' }}"
+                width="700"
+                height="700"
                 loading="lazy"
               >
             {% else %}
