@@ -657,35 +657,26 @@
         // Get filter keyword
         var filterKeyword = this.getAttribute('data-category-filter');
         
-        // Find first matching product
-        var firstMatchIndex = -1;
-        allCards.forEach(function(card, index) {
+        // Filter products - show/hide based on keyword match
+        allCards.forEach(function(card) {
           var productTitle = card.getAttribute('data-product-title');
           if (productTitle && productTitle.includes(filterKeyword)) {
-            if (firstMatchIndex === -1) {
-              firstMatchIndex = index;
-            }
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
           }
         });
 
-        // Scroll to first matching product
-        if (firstMatchIndex !== -1) {
-          var cardWidth = getCardWidth();
-          var targetTranslate = -1 * firstMatchIndex * cardWidth;
-          var maxTranslate = getMaxTranslate();
-          
-          // Ensure we don't scroll past bounds
-          prevTranslate = Math.max(maxTranslate, Math.min(0, targetTranslate));
-          currentTranslate = prevTranslate;
-          
-          track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          setSliderPosition();
-          updateButtons();
-          
-          setTimeout(function() {
-            track.style.transition = '';
-          }, 500);
-        }
+        // Reset carousel position to start
+        prevTranslate = 0;
+        currentTranslate = 0;
+        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        setSliderPosition();
+        updateButtons();
+        
+        setTimeout(function() {
+          track.style.transition = '';
+        }, 500);
       });
     });
   }
