@@ -165,7 +165,7 @@
   section.bestsellers-section-unique .bs-card {
     flex: 0 0 {{ section.settings.card_width }}px;
     width: {{ section.settings.card_width }}px;
-    height: {{ section.settings.card_height }}px;
+    min-height: {{ section.settings.card_height }}px;
     background: white;
     border-radius: {{ section.settings.card_border_radius }}px;
     border: {{ section.settings.card_border_width }}px solid {{ section.settings.card_border_color }};
@@ -174,18 +174,12 @@
     color: inherit;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
-  }
-
-  section.bestsellers-section-unique .bs-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   }
 
   section.bestsellers-section-unique .bs-img-wrapper {
     position: relative;
     overflow: hidden;
-    height: calc({{ section.settings.card_height }}px - {{ section.settings.card_info_height }}px);
+    height: {{ section.settings.card_image_height }}px;
     flex-shrink: 0;
   }
 
@@ -193,11 +187,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  section.bestsellers-section-unique .bs-card:hover .bs-img {
-    transform: scale(1.05);
   }
 
   section.bestsellers-section-unique .bs-info {
@@ -205,7 +194,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    height: {{ section.settings.card_info_height }}px;
+    flex: 1;
   }
 
   section.bestsellers-section-unique .bs-prod-title {
@@ -215,11 +204,6 @@
     color: {{ section.settings.product_title_color }};
     margin: 0;
     line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   section.bestsellers-section-unique .bs-price {
@@ -299,15 +283,14 @@
     section.bestsellers-section-unique .bs-card {
       flex: 0 0 {{ section.settings.card_width_mobile }}px;
       width: {{ section.settings.card_width_mobile }}px;
-      height: {{ section.settings.card_height | times: 0.9 }}px;
+      min-height: auto;
     }
 
     section.bestsellers-section-unique .bs-img-wrapper {
-      height: calc({{ section.settings.card_height | times: 0.9 }}px - {{ section.settings.card_info_height | times: 0.9 }}px);
+      height: {{ section.settings.card_image_height | times: 0.9 }}px;
     }
 
     section.bestsellers-section-unique .bs-info {
-      height: {{ section.settings.card_info_height | times: 0.9 }}px;
       padding: 16px 14px;
       gap: 6px;
     }
@@ -939,18 +922,19 @@
       "max": 600,
       "step": 10,
       "unit": "px",
-      "label": "Card Height",
-      "default": 500
+      "label": "Card Min Height",
+      "default": 500,
+      "info": "Minimum height - card will expand if content is longer"
     },
     {
       "type": "range",
-      "id": "card_info_height",
-      "min": 80,
-      "max": 160,
+      "id": "card_image_height",
+      "min": 300,
+      "max": 500,
       "step": 10,
       "unit": "px",
-      "label": "Info Section Height",
-      "default": 100
+      "label": "Image Height",
+      "default": 400
     },
     {
       "type": "range",
