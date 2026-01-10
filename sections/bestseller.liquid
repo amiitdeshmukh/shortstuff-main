@@ -639,10 +639,38 @@
   function initCategoryFilter() {
     var menuItems = document.querySelectorAll('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item');
     var track = document.getElementById(trackId);
+    var prevBtn = document.querySelector('.bs-prev-' + sectionId);
+    var nextBtn = document.querySelector('.bs-next-' + sectionId);
     
     if (!track || menuItems.length === 0) return;
 
     var allCards = track.querySelectorAll('.bs-card');
+    var cards = allCards;
+
+    // Function to get card width
+    function getCardWidthFilter() {
+      var visibleCards = track.querySelectorAll('.bs-card[style*="display: flex"], .bs-card:not([style*="display"])');
+      if (visibleCards.length === 0) return 0;
+      var cardStyle = window.getComputedStyle(visibleCards[0]);
+      var gap = parseInt(window.getComputedStyle(track).gap) || 20;
+      return parseInt(cardStyle.width) + gap;
+    }
+
+    // Function to get max translate
+    function getMaxTranslateFilter() {
+      var wrapper = track.parentElement;
+      var visibleCards = track.querySelectorAll('.bs-card[style*="display: flex"], .bs-card:not([style*="display"])');
+      var trackWidth = visibleCards.length * getCardWidthFilter();
+      return Math.min(0, wrapper.offsetWidth - trackWidth + getCardWidthFilter());
+    }
+
+    // Function to update buttons
+    function updateButtonsFilter() {
+      if (!prevBtn || !nextBtn) return;
+      var maxTranslate = getMaxTranslateFilter();
+      prevBtn.disabled = currentTranslate >= 0;
+      nextBtn.disabled = currentTranslate <= maxTranslate;
+    }
 
     // Function to apply filter
     function applyFilter(filterKeyword) {
@@ -658,13 +686,8 @@
       // Reset carousel position to start
       prevTranslate = 0;
       currentTranslate = 0;
-      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      setSliderPosition();
-      updateButtons();
-      
-      setTimeout(function() {
-        track.style.transition = '';
-      }, 500);
+      track.style.transform = 'translateX(0px)';
+      updateButtonsFilter();
     }
 
     // Apply default filter on load (Zippies)
