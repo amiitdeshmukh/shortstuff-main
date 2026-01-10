@@ -348,15 +348,33 @@
 <section class="bestsellers-section-unique" data-section-id="{{ section.id }}">
   <!-- Decorative Icons -->
   {% if section.settings.leaf_icon_1 != blank %}
-    <img src="{{ section.settings.leaf_icon_1 | image_url: width: 200 }}" alt="" class="bs-leaf-1" loading="lazy">
+    <img src="{{ section.settings.leaf_icon_1 | image_url: width: 200 }}" 
+         alt="" 
+         width="200" 
+         height="200" 
+         class="bs-leaf-1" 
+         loading="lazy"
+         aria-hidden="true">
   {% endif %}
 
   {% if section.settings.leaf_icon_2 != blank %}
-    <img src="{{ section.settings.leaf_icon_2 | image_url: width: 200 }}" alt="" class="bs-leaf-2" loading="lazy">
+    <img src="{{ section.settings.leaf_icon_2 | image_url: width: 200 }}" 
+         alt="" 
+         width="200" 
+         height="200" 
+         class="bs-leaf-2" 
+         loading="lazy"
+         aria-hidden="true">
   {% endif %}
 
   {% if section.settings.sun_icon != blank %}
-    <img src="{{ section.settings.sun_icon | image_url: width: 300 }}" alt="" class="bs-sun" loading="lazy">
+    <img src="{{ section.settings.sun_icon | image_url: width: 300 }}" 
+         alt="" 
+         width="300" 
+         height="300" 
+         class="bs-sun" 
+         loading="lazy"
+         aria-hidden="true">
   {% endif %}
 
   <div class="bs-container">
@@ -409,6 +427,8 @@
                 {% if product.featured_image != blank %}
                   <img src="{{ product.featured_image | image_url: width: 500 }}" 
                        alt="{{ product.featured_image.alt | default: product.title }}" 
+                       width="500" 
+                       height="500" 
                        class="bs-img" 
                        loading="lazy">
                 {% else %}
@@ -437,6 +457,8 @@
                 {% if product.featured_image != blank %}
                   <img src="{{ product.featured_image | image_url: width: 500 }}" 
                        alt="{{ product.featured_image.alt | default: product.title }}" 
+                       width="500" 
+                       height="500" 
                        class="bs-img" 
                        loading="lazy">
                 {% else %}
