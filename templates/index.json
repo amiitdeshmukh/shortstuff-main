@@ -395,15 +395,15 @@
         "category_MQYxbB": {
           "type": "category",
           "settings": {
-            "category_name": "Pyjamas",
-            "category_filter": "PJ"
+            "category_name": "Zippies",
+            "category_filter": "Zippy"
           }
         },
         "category_FcM4HU": {
           "type": "category",
           "settings": {
-            "category_name": "Zippies",
-            "category_filter": "Zippy"
+            "category_name": "Pajamas",
+            "category_filter": "PJ"
           }
         }
       },
