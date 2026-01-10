@@ -117,7 +117,7 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding: 0 20px;
+      padding: 0 20px 0 20px;
       scroll-snap-type: x mandatory;
       margin: 0;
       width: 100%;
@@ -132,6 +132,14 @@
       flex: 0 0 {{ section.settings.card_width_mobile }}px;
       width: {{ section.settings.card_width_mobile }}px;
       scroll-snap-align: start;
+    }
+
+    .watch-shop-card:first-child {
+      margin-left: 0;
+    }
+
+    .watch-shop-card:last-child {
+      margin-right: 0;
     }
 
     .watch-shop-media {
