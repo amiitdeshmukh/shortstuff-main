@@ -89,6 +89,9 @@
     transition: all 0.3s ease;
     position: relative;
     white-space: nowrap;
+    background: none;
+    border: none;
+    padding: 0;
   }
 
   section.bestsellers-section-unique .bs-menu-item:hover {
@@ -388,11 +391,12 @@
         {% if section.settings.show_category_menu and section.blocks.size > 0 %}
           <div class="bs-menu">
             {% for block in section.blocks %}
-              <a href="{{ block.settings.category_link | default: '#' }}" 
-                 class="bs-menu-item {% if forloop.first %}active{% endif %}"
-                 {{ block.shopify_attributes }}>
+              <button type="button"
+                      class="bs-menu-item {% if forloop.first %}active{% endif %}"
+                      data-category-filter="{{ block.settings.category_filter | default: block.settings.category_name | downcase }}"
+                      {{ block.shopify_attributes }}>
                 {{ block.settings.category_name }}
-              </a>
+              </button>
             {% endfor %}
           </div>
         {% endif %}
@@ -422,7 +426,9 @@
 
         {% if collection != blank %}
           {% for product in collection.products limit: products_to_show %}
-            <a href="{{ product.url }}" class="bs-card">
+            <a href="{{ product.url }}" 
+               class="bs-card" 
+               data-product-title="{{ product.title | downcase }}">
               <div class="bs-img-wrapper">
                 {% if product.featured_image != blank %}
                   <img src="{{ product.featured_image | image_url: width: 500 }}" 
@@ -452,7 +458,9 @@
           {% endfor %}
         {% else %}
           {% for product in collections.all.products limit: products_to_show %}
-            <a href="{{ product.url }}" class="bs-card">
+            <a href="{{ product.url }}" 
+               class="bs-card" 
+               data-product-title="{{ product.title | downcase }}">
               <div class="bs-img-wrapper">
                 {% if product.featured_image != blank %}
                   <img src="{{ product.featured_image | image_url: width: 500 }}" 
@@ -644,10 +652,69 @@
     updateButtons();
   }
 
+  // Category Filter Functionality
+  function initCategoryFilter() {
+    var menuItems = document.querySelectorAll('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item');
+    var track = document.getElementById(trackId);
+    
+    if (!track || menuItems.length === 0) return;
+
+    var allCards = track.querySelectorAll('.bs-card');
+
+    menuItems.forEach(function(menuItem) {
+      menuItem.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active state
+        menuItems.forEach(function(item) {
+          item.classList.remove('active');
+        });
+        this.classList.add('active');
+
+        // Get filter keyword
+        var filterKeyword = this.getAttribute('data-category-filter');
+        
+        // Find first matching product
+        var firstMatchIndex = -1;
+        allCards.forEach(function(card, index) {
+          var productTitle = card.getAttribute('data-product-title');
+          if (productTitle && productTitle.includes(filterKeyword)) {
+            if (firstMatchIndex === -1) {
+              firstMatchIndex = index;
+            }
+          }
+        });
+
+        // Scroll to first matching product
+        if (firstMatchIndex !== -1) {
+          var cardWidth = getCardWidth();
+          var targetTranslate = -1 * firstMatchIndex * cardWidth;
+          var maxTranslate = getMaxTranslate();
+          
+          // Ensure we don't scroll past bounds
+          prevTranslate = Math.max(maxTranslate, Math.min(0, targetTranslate));
+          currentTranslate = prevTranslate;
+          
+          track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          setSliderPosition();
+          updateButtons();
+          
+          setTimeout(function() {
+            track.style.transition = '';
+          }, 500);
+        }
+      });
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBestsellers);
+    document.addEventListener('DOMContentLoaded', function() {
+      initBestsellers();
+      initCategoryFilter();
+    });
   } else {
     initBestsellers();
+    initCategoryFilter();
   }
 })();
 </script>
@@ -1183,9 +1250,10 @@
           "default": "Pyjamas"
         },
         {
-          "type": "url",
-          "id": "category_link",
-          "label": "Link"
+          "type": "text",
+          "id": "category_filter",
+          "label": "Filter Keyword",
+          "info": "Keyword to match in product titles (e.g., 'pj', 'zippy', 'onezie'). Leave blank to use category name."
         }
       ]
     }
