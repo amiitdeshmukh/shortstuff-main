@@ -1,0 +1,319 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Feature Cards Section */
+  .feature-cards-wrapper {
+    background-color: {{ section.settings.bg_color | default: '#F8F6F1' }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-cards-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .feature-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .feature-card {
+    background-color: {{ section.settings.card_bg_color | default: '#FFFFFF' }};
+    border-radius: {{ section.settings.card_border_radius | default: 14 }}px;
+    padding: {{ section.settings.card_padding | default: 30 }}px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid {{ section.settings.card_border_color | default: '#E8E4DC' }};
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-card-icon {
+    margin-bottom: 20px;
+    width: {{ section.settings.icon_size | default: 100 }}px;
+    height: {{ section.settings.icon_size | default: 100 }}px;
+    flex-shrink: 0;
+  }
+
+  .feature-card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .feature-card-text {
+    font-size: {{ section.settings.text_size | default: 14 }}px;
+    font-weight: {{ section.settings.text_weight | default: 500 }};
+    color: {{ section.settings.text_color | default: '#333333' }};
+    line-height: 1.4;
+    text-align: center;
+    font-family: var(--font-body-family);
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 1024px) {
+    .feature-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .feature-cards-container {
+      padding: 0 1rem;
+    }
+
+    .feature-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .feature-card {
+      padding: 25px 15px;
+      min-height: 160px;
+    }
+
+    .feature-card-icon {
+      width: {{ section.settings.icon_size | default: 100 | times: 0.8 }}px;
+      height: {{ section.settings.icon_size | default: 100 | times: 0.8 }}px;
+      margin-bottom: 15px;
+    }
+
+    .feature-card-text {
+      font-size: {{ section.settings.text_size | default: 14 | times: 0.9 }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding feature-cards-wrapper">
+  <div class="feature-cards-container">
+    <div class="feature-cards-grid">
+      
+      {% for block in section.blocks %}
+        {% if block.type == 'feature_card' %}
+          <div class="feature-card" {{ block.shopify_attributes }}>
+            
+            <!-- Icon -->
+            {% if block.settings.icon != blank %}
+              <div class="feature-card-icon">
+                <img 
+                  src="{{ block.settings.icon | image_url: width: 200 }}" 
+                  alt="{{ block.settings.icon.alt | default: block.settings.text }}"
+                  loading="lazy"
+                >
+              </div>
+            {% else %}
+              <div class="feature-card-icon" style="background: linear-gradient(135deg, #F8F6F1 0%, #E8E4DC 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px;">
+                Add Icon
+              </div>
+            {% endif %}
+
+            <!-- Text -->
+            {% if block.settings.text != blank %}
+              <div class="feature-card-text">
+                {{ block.settings.text | escape }}
+              </div>
+            {% endif %}
+
+          </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Specialty",
+  "tag": "section", 
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background & Layout"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#F8F6F1"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color", 
+      "label": "Card Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#E8E4DC"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Card Padding",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Icon & Typography"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 40,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Size",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text Font Size",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Text Font Weight",
+      "default": "500",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi Bold"},
+        {"value": "700", "label": "Bold"}
+      ]
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding", 
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Card Icon",
+          "info": "Recommended: 200x200px PNG or SVG"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Card Text",
+          "default": "Feature description goes here",
+          "info": "Keep text concise for best visual results"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Specialty",
+      "blocks": [
+        {
+          "type": "feature_card",
+          "settings": {
+            "text": "Designed to be a hand-me-down"
+          }
+        },
+        {
+          "type": "feature_card", 
+          "settings": {
+            "text": "Comfortable in all temperatures"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "text": "Snuggle soft sustainable fabric"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "text": "Stylish, durable and functional"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

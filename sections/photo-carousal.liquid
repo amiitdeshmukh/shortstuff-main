@@ -1,0 +1,953 @@
+<style>
+  .three-column-section {
+    background-color: {{ section.settings.background_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .three-column-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Section Title */
+  .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title__heading {
+    font-size: {{ section.settings.heading_size }}px;
+    font-weight: bold;
+    color: {{ section.settings.heading_color }};
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* Curvy line decoration under heading */
+  .section-title__heading::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -{{ section.settings.line_icon_overlap }}px;
+    width: {{ section.settings.line_icon_width }}px;
+    height: {{ section.settings.line_icon_height }}px;
+    background-image: url("{{ section.settings.line_icon | image_url }}");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    z-index: 1;
+  }
+
+  .section-title-wrapper {
+    margin-bottom: {{ section.settings.line_icon_spacing }}px;
+  }
+
+  /* Static Decorative Icons - Fixed Proportional Scaling */
+  .floating-icon {
+    position: absolute;
+    z-index: 1;
+    object-fit: contain;
+    /* Removed animations - now static */
+  }
+
+  .floating-icon--1 {
+    top: {{ section.settings.icon1_top_desktop }}%;
+    left: {{ section.settings.icon1_left_desktop }}%;
+    width: {{ section.settings.icon1_size_desktop }}px;
+    height: {{ section.settings.icon1_size_desktop }}px;
+  }
+
+  .floating-icon--2 {
+    top: {{ section.settings.icon2_top_desktop }}%;
+    right: {{ section.settings.icon2_right_desktop }}%;
+    width: {{ section.settings.icon2_size_desktop }}px;
+    height: {{ section.settings.icon2_size_desktop }}px;
+  }
+
+  .floating-icon--3 {
+    bottom: {{ section.settings.icon3_bottom_desktop }}%;
+    left: {{ section.settings.icon3_left_desktop }}%;
+    width: {{ section.settings.icon3_size_desktop }}px;
+    height: {{ section.settings.icon3_size_desktop }}px;
+  }
+
+  /* Desktop Layout */
+  .three-column-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .column-item {
+    text-align: center;
+    position: relative;
+  }
+
+  .column-item__image-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: {{ section.settings.image_border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .column-item__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .column-item__image:hover {
+    transform: scale(1.05);
+  }
+
+  .column-item__title {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 600;
+    color: {{ section.settings.title_color }};
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* Mobile Layout */
+  @media screen and (max-width: 768px) {
+    .three-column-section {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .section-title {
+      margin-bottom: 2rem;
+    }
+
+    .section-title__heading {
+      font-size: {{ section.settings.heading_size | times: 0.8 }}px;
+    }
+
+    /* Responsive curvy line on mobile */
+    .section-title__heading::after {
+      width: {{ section.settings.line_icon_width | times: 0.8 }}px;
+      height: {{ section.settings.line_icon_height | times: 0.8 }}px;
+      bottom: -{{ section.settings.line_icon_overlap | times: 0.8 }}px;
+    }
+
+    .section-title-wrapper {
+      margin-bottom: {{ section.settings.line_icon_spacing | times: 0.7 }}px;
+    }
+
+    .three-column-grid {
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .column-item {
+      flex-shrink: 0;
+      padding: 0 1rem;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #ddd;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background-color: {{ section.settings.title_color }};
+    }
+
+    .column-item__title {
+      font-size: {{ section.settings.title_size | times: 0.9 }}px;
+    }
+
+    /* Mobile Icon Positions - Fixed Proportional Scaling */
+    .floating-icon--1 {
+      top: {{ section.settings.icon1_top_mobile }}% !important;
+      left: {{ section.settings.icon1_left_mobile }}% !important;
+      width: {{ section.settings.icon1_size_mobile }}px !important;
+      height: {{ section.settings.icon1_size_mobile }}px !important;
+    }
+
+    .floating-icon--2 {
+      top: {{ section.settings.icon2_top_mobile }}% !important;
+      right: {{ section.settings.icon2_right_mobile }}% !important;
+      width: {{ section.settings.icon2_size_mobile }}px !important;
+      height: {{ section.settings.icon2_size_mobile }}px !important;
+    }
+
+    .floating-icon--3 {
+      bottom: {{ section.settings.icon3_bottom_mobile }}% !important;
+      left: {{ section.settings.icon3_left_mobile }}% !important;
+      width: {{ section.settings.icon3_size_mobile }}px !important;
+      height: {{ section.settings.icon3_size_mobile }}px !important;
+    }
+  }
+
+  /* Desktop - Hide carousel dots */
+  @media screen and (min-width: 769px) {
+    .carousel-dots {
+      display: none;
+    }
+
+    .carousel-wrapper {
+      display: contents;
+    }
+  }
+</style>
+
+<section class="three-column-section">
+  <!-- Static Icons -->
+  {%- if section.settings.icon1_image != blank -%}
+    <img
+      src="{{ section.settings.icon1_image | image_url: width: 300 }}"
+      alt="Decoration 1"
+      class="floating-icon floating-icon--1"
+      loading="lazy"
+    >
+  {%- endif -%}
+
+  {%- if section.settings.icon2_image != blank -%}
+    <img
+      src="{{ section.settings.icon2_image | image_url: width: 300 }}"
+      alt="Decoration 2"
+      class="floating-icon floating-icon--2"
+      loading="lazy"
+    >
+  {%- endif -%}
+
+  {%- if section.settings.icon3_image != blank -%}
+    <img
+      src="{{ section.settings.icon3_image | image_url: width: 300 }}"
+      alt="Decoration 3"
+      class="floating-icon floating-icon--3"
+      loading="lazy"
+    >
+  {%- endif -%}
+
+  <div class="three-column-container">
+    <!-- Section Title with Curvy Line -->
+    {%- if section.settings.section_heading != blank -%}
+      <div class="section-title">
+        <div class="section-title-wrapper">
+          <h2 class="section-title__heading">{{ section.settings.section_heading | escape }}</h2>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="three-column-grid">
+      <div class="carousel-wrapper">
+        {%- for block in section.blocks -%}
+          {%- assign show_block = false -%}
+          {%- assign current_country = localization.country.iso_code -%}
+          
+          {%- comment -%} Check if block should be shown based on region settings {%- endcomment -%}
+          {%- if block.settings.target_region == 'all' -%}
+            {%- assign show_block = true -%}
+          {%- elsif block.settings.target_region == 'india' and current_country == 'IN' -%}
+            {%- assign show_block = true -%}
+          {%- elsif block.settings.target_region == 'usa' and current_country == 'US' -%}
+            {%- assign show_block = true -%}
+          {%- endif -%}
+
+          {%- if show_block -%}
+            <div class="column-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <div class="column-item__image-wrapper">
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}">
+                  {%- endif -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                    class="column-item__image"
+                    loading="lazy"
+                    width="600"
+                    height="auto"
+                  >
+                  {%- if block.settings.link != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="column-item__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Mobile Carousel Dots -->
+    <div class="carousel-dots">
+      {%- for block in section.blocks -%}
+        {%- assign show_dot = false -%}
+        {%- assign current_country = localization.country.iso_code -%}
+        
+        {%- if block.settings.target_region == 'all' -%}
+          {%- assign show_dot = true -%}
+        {%- elsif block.settings.target_region == 'india' and current_country == 'IN' -%}
+          {%- assign show_dot = true -%}
+        {%- elsif block.settings.target_region == 'usa' and current_country == 'US' -%}
+          {%- assign show_dot = true -%}
+        {%- endif -%}
+
+        {%- if show_dot -%}
+          <span class="carousel-dot{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index0 }}"></span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Only run carousel on mobile
+  function initCarousel() {
+    if (window.innerWidth <= 768) {
+      const wrapper = document.querySelector('.carousel-wrapper');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const visibleItems = document.querySelectorAll('.column-item');
+      const totalSlides = visibleItems.length;
+      
+      // Don't initialize carousel if there are no visible items
+      if (totalSlides === 0) return;
+      
+      let currentSlide = 0;
+      let autoSlideInterval;
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      // Calculate percentage based on actual visible items
+      const slidePercentage = 100 / totalSlides;
+
+      function goToSlide(slideIndex) {
+        const translateX = -(slideIndex * slidePercentage);
+        wrapper.style.transform = `translateX(${translateX}%)`;
+        
+        // Update active dot
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[slideIndex]) {
+          dots[slideIndex].classList.add('active');
+        }
+        
+        currentSlide = slideIndex;
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        goToSlide(currentSlide);
+      }
+
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        goToSlide(currentSlide);
+      }
+
+      function startAutoSlide() {
+        autoSlideInterval = setInterval(nextSlide, {{ section.settings.autoplay_delay | times: 1000 }});
+      }
+
+      function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+      }
+
+      // Touch event handlers
+      function handleTouchStart(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoSlide();
+      }
+
+      function handleTouchEnd(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        
+        // Restart auto-slide after swipe
+        if ({{ section.settings.enable_autoplay | json }}) {
+          startAutoSlide();
+        }
+      }
+
+      function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const swipeDistance = touchEndX - touchStartX;
+        
+        if (Math.abs(swipeDistance) > swipeThreshold) {
+          if (swipeDistance > 0) {
+            // Swiped right - go to previous slide
+            prevSlide();
+          } else {
+            // Swiped left - go to next slide
+            nextSlide();
+          }
+        }
+      }
+
+      // Add touch event listeners to wrapper
+      wrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
+      wrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+      // Dot click handlers
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          stopAutoSlide();
+          goToSlide(index);
+          startAutoSlide(); // Restart auto-slide after manual interaction
+        });
+      });
+
+      // Start auto-slide
+      if ({{ section.settings.enable_autoplay | json }}) {
+        startAutoSlide();
+      }
+
+      // Pause on hover
+      const section = document.querySelector('.three-column-section');
+      section.addEventListener('mouseenter', stopAutoSlide);
+      section.addEventListener('mouseleave', () => {
+        if ({{ section.settings.enable_autoplay | json }}) {
+          startAutoSlide();
+        }
+      });
+
+      // Update wrapper width based on visible items
+      wrapper.style.width = `${totalSlides * 100}%`;
+      
+      // Update each item width
+      visibleItems.forEach(item => {
+        item.style.width = `${slidePercentage}%`;
+      });
+    }
+  }
+
+  // Initialize
+  initCarousel();
+  
+  // Re-initialize on window resize
+  window.addEventListener('resize', function() {
+    setTimeout(initCarousel, 100);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Three Column Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Padding Bottom",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Padding Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading (Optional)",
+      "info": "Add a main heading for this section"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "header",
+      "content": "Decorative Line Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "line_icon",
+      "label": "Curvy Line Icon (SVG/PNG)",
+      "info": "Upload your custom curvy line icon to appear below the heading"
+    },
+    {
+      "type": "range",
+      "id": "line_icon_width",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Line Icon Width",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "line_icon_height",
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Line Icon Height",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "line_icon_overlap",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Overlap with Heading",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "line_icon_spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Spacing Below Icon",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFCF6"
+    },
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Column Title Font Size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Column Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Image Border Radius",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Mobile Carousel Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable Auto-play on Mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "label": "Auto-play Delay",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Icon 1 - Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon1_image",
+      "label": "Upload Icon 1 (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "icon1_size_desktop",
+      "min": 30,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon1_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Top Position",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "icon1_left_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Left Position",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Icon 1 - Mobile"
+    },
+    {
+      "type": "range",
+      "id": "icon1_size_mobile",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon1_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Top Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon1_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Left Position",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Icon 2 - Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon2_image",
+      "label": "Upload Icon 2 (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "icon2_size_desktop",
+      "min": 30,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "icon2_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Top Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon2_right_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Right Position",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Icon 2 - Mobile"
+    },
+    {
+      "type": "range",
+      "id": "icon2_size_mobile",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "icon2_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Top Position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "icon2_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Right Position",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Icon 3 - Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon3_image",
+      "label": "Upload Icon 3 (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "icon3_size_desktop",
+      "min": 30,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon3_bottom_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Bottom Position",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "icon3_left_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Left Position",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Icon 3 - Mobile"
+    },
+    {
+      "type": "range",
+      "id": "icon3_size_mobile",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "icon3_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Bottom Position",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "icon3_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Left Position",
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column Item",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Region Targeting"
+        },
+        {
+          "type": "select",
+          "id": "target_region",
+          "label": "Show this card in",
+          "options": [
+            {
+              "value": "all",
+              "label": "All Regions (Default)"
+            },
+            {
+              "value": "india",
+              "label": "India Only"
+            },
+            {
+              "value": "usa",
+              "label": "USA Only"
+            }
+          ],
+          "default": "all",
+          "info": "Choose which region should see this card. Useful for showing different products in different countries."
+        },
+        {
+          "type": "header",
+          "content": "Card Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Column Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)",
+          "info": "Make the image clickable"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Three Column Carousel",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "title": "World of Wonder"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "title": "Elemental Explorers"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "title": "Fabric Care"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

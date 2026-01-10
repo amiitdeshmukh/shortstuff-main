@@ -1,0 +1,376 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --font-heading-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+
+.delivering-love-section {
+  {% if section.settings.bg_image != blank %}
+    background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}');
+    background-size: {{ section.settings.bg_size }};
+    background-position: {{ section.settings.bg_position }};
+    background-repeat: {{ section.settings.bg_repeat }};
+    background-attachment: {{ section.settings.bg_attachment }};
+    {% if section.settings.enable_bg_overlay %}
+      position: relative;
+    {% endif %}
+  {% elsif section.settings.enable_bg_gradient %}
+    background: linear-gradient({{ section.settings.bg_gradient_direction }}deg, {{ section.settings.bg_gradient_color_1 }} 0%, {{ section.settings.bg_gradient_color_2 }} 100%);
+  {% else %}
+    background-color: {{ section.settings.bg_color | default: '#F4E6D1' }};
+  {% endif %}
+  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Overlay */
+{% if section.settings.bg_image != blank and section.settings.enable_bg_overlay %}
+.delivering-love-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: {{ section.settings.overlay_bg_color }};
+  opacity: {{ section.settings.overlay_opacity_value | divided_by: 100.0 }};
+  z-index: 1;
+  pointer-events: none;
+}
+{% endif %}
+
+.delivering-love-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.delivering-love-title {
+  font-family: var(--font-heading-family);
+  font-size: {{ section.settings.title_size }}px;
+  font-weight: {{ section.settings.title_weight }};
+  color: {{ section.settings.title_color }};
+  margin: 0 0 {{ section.settings.title_margin_bottom }}px 0;
+  line-height: 1.2;
+}
+
+.delivering-love-subtitle {
+  font-family: var(--font-body-family);
+  font-size: {{ section.settings.subtitle_size }}px;
+  font-weight: {{ section.settings.subtitle_weight }};
+  color: {{ section.settings.subtitle_color }};
+  margin: 0;
+  line-height: 1.4;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .delivering-love-section {
+    padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px 0;
+  }
+  
+  .delivering-love-container {
+    padding: 0 16px;
+  }
+  
+  .delivering-love-title {
+    font-size: {{ section.settings.title_size | times: 0.8 }}px;
+    margin-bottom: {{ section.settings.title_margin_bottom | times: 0.8 }}px;
+  }
+  
+  .delivering-love-subtitle {
+    font-size: {{ section.settings.subtitle_size | times: 0.9 }}px;
+  }
+}
+
+@media (max-width: 480px) {
+  .delivering-love-container {
+    padding: 0 12px;
+  }
+  
+  .delivering-love-title {
+    font-size: {{ section.settings.title_size | times: 0.7 }}px;
+  }
+  
+  .delivering-love-subtitle {
+    font-size: {{ section.settings.subtitle_size | times: 0.85 }}px;
+  }
+}
+</style>
+
+<section class="delivering-love-section">
+  <div class="delivering-love-container">
+    {% if section.settings.main_title != blank %}
+      <h2 class="delivering-love-title">{{ section.settings.main_title | escape }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subtitle != blank %}
+      <p class="delivering-love-subtitle">{{ section.settings.subtitle | escape }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Delivering Love",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "main_title",
+      "label": "Main Title",
+      "default": "Delivering Love"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Packed With Care, Delivered With Love!"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Font Size",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title Font Weight",
+      "default": "700",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi Bold"},
+        {"value": "700", "label": "Bold"},
+        {"value": "800", "label": "Extra Bold"}
+      ]
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#8B2635"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Title Bottom Margin",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle Font Size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "subtitle_weight",
+      "label": "Subtitle Font Weight",
+      "default": "400",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi Bold"}
+      ]
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color",
+      "default": "#5D4037"
+    },
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "bg_size",
+      "label": "Background Size",
+      "default": "cover",
+      "options": [
+        {"value": "cover", "label": "Cover"},
+        {"value": "contain", "label": "Contain"},
+        {"value": "auto", "label": "Auto"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "Background Position",
+      "default": "center center",
+      "options": [
+        {"value": "center center", "label": "Center"},
+        {"value": "top center", "label": "Top"},
+        {"value": "bottom center", "label": "Bottom"},
+        {"value": "left center", "label": "Left"},
+        {"value": "right center", "label": "Right"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bg_repeat",
+      "label": "Background Repeat",
+      "default": "no-repeat",
+      "options": [
+        {"value": "no-repeat", "label": "No Repeat"},
+        {"value": "repeat", "label": "Repeat"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bg_attachment",
+      "label": "Background Attachment",
+      "default": "scroll",
+      "options": [
+        {"value": "scroll", "label": "Scroll"},
+        {"value": "fixed", "label": "Fixed"}
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_bg_overlay",
+      "label": "Enable Background Overlay",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_bg_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_value",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_bg_gradient",
+      "label": "Enable Gradient Background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F4E6D1"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_color_1",
+      "label": "Gradient Start Color",
+      "default": "#F4E6D1"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_color_2",
+      "label": "Gradient End Color",
+      "default": "#E8D5B7"
+    },
+    {
+      "type": "range",
+      "id": "bg_gradient_direction",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "label": "Gradient Direction",
+      "default": 135
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Top Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Bottom Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Delivering Love"
+    }
+  ]
+}
+{% endschema %}

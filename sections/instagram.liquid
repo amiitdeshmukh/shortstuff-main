@@ -1,0 +1,55 @@
+{% schema %}
+{
+  "name": "Short Stuff Instagram",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Short Stuff Instagram"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Short Stuff Instagram",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="short-stuff-instagram-section">
+  <h2>{{ section.settings.title }}</h2>
+  <div class="instagram-feed-container">
+    <!-- Elfsight Instagram Feed | Short Stuff -->
+    <div class="elfsight-app-d5f485c0-2a90-459e-ae3c-9d922d34cc88" data-elfsight-app-lazy></div>
+  </div>
+</div>
+
+<!-- Load Elfsight Script Only Once -->
+<script>
+  if (!window.elfsightScriptLoaded) {
+    window.elfsightScriptLoaded = true;
+    const script = document.createElement('script');
+    script.src = 'https://static.elfsight.com/platform/platform.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+</script>
+
+<style>
+  .short-stuff-instagram-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .short-stuff-instagram-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  .instagram-feed-container {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+</style>

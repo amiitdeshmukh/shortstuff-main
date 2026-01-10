@@ -1,0 +1,53 @@
+{% comment %}
+  This line connects to your product's metafield.
+  We are using the key you provided: custom.usp_card
+{% endcomment %}
+{%- assign card_list = product.metafields.custom.usp_card.value -%}
+
+<div class="page-width">
+  <h2 class="h2_style">{{ section.settings.title }}</h2>
+
+  {% if card_list.size > 0 %}
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
+      {% for item in card_list %}
+        <div class="card-item" style="text-align: center;">
+          {% if item.image.value != blank %}
+            <img
+              src="{{ item.image.value | image_url: width: 400 }}"
+              alt="{{ item.heading.value | escape }}"
+              loading="lazy"
+              width="{{ item.image.value.width }}"
+              height="{{ item.image.value.height }}"
+              style="max-width: 100%; height: auto; border-radius: 10px;"
+            >
+          {% endif %}
+
+          {% if item.heading.value != blank %}
+            <h3 style="margin-top: 15px; margin-bottom: 5px; font-size: 18px;">{{ item.heading.value | escape }}</h3>
+          {% endif %}
+
+          {% if item.description.value != blank %}
+            <div style="font-size: 14px;">{{ item.description.value }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No feature cards have been assigned to this product yet.</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Feature Cards 5",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Product Features"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,931 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign user_market = localization.market.handle | default: 'default'
+  assign user_country = localization.country.iso_code | default: 'US'
+  
+  assign banner_count = section.blocks | size
+  assign auto_rotate = section.settings.auto_rotate
+  assign rotation_speed = section.settings.rotation_speed | times: 1000
+-%}
+
+<style>
+  #MarketBannerCarousel-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .carousel__wrapper {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .carousel__track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .carousel__slide {
+    flex: 0 0 100%;
+    position: relative;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, {{ section.settings.image_overlay_opacity | divided_by: 100.0 }});
+    pointer-events: none;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: {% case section.settings.desktop_content_position %}{% when 'top-left', 'top-center', 'top-right' %}flex-start{% when 'middle-left', 'middle-center', 'middle-right' %}center{% when 'bottom-left', 'bottom-center', 'bottom-right' %}flex-end{% endcase %};
+    justify-content: {% case section.settings.desktop_content_position %}{% when 'top-left', 'middle-left', 'bottom-left' %}flex-start{% when 'top-center', 'middle-center', 'bottom-center' %}center{% when 'top-right', 'middle-right', 'bottom-right' %}flex-end{% endcase %};
+    padding: 40px 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__text-box {
+    max-width: {{ section.settings.text_box_max_width }}px;
+    text-align: {{ section.settings.desktop_content_alignment }};
+    color: white;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__heading {
+    margin: 0 0 15px 0;
+    line-height: 1.2;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__text {
+    margin: 0 0 20px 0;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__button:hover {
+    background: #f0f0f0;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__button--secondary {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .banner__button--secondary:hover {
+    background: #fff;
+    color: #000;
+  }
+  
+  /* Dots Navigation */
+  #MarketBannerCarousel-{{ section.id }} .carousel__dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .carousel__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  #MarketBannerCarousel-{{ section.id }} .carousel__dot.active {
+    background: rgba(255, 255, 255, 1);
+  }
+  
+  .hidden_desktop {
+    display: block !important;
+  }
+  .hidden_mobile {
+    display: none !important;
+  }
+  
+  @media (min-width: 750px) {
+    .hidden_desktop {
+      display: none !important;
+    }
+    .hidden_mobile {
+      display: block !important;
+    }
+  }
+  
+  @media (max-width: 749px) {
+    #MarketBannerCarousel-{{ section.id }} .banner__content {
+      {% if section.settings.show_text_below %}
+        position: relative;
+        background: #f8f8f8;
+      {% else %}
+        position: absolute;
+      {% endif %}
+      align-items: {% case section.settings.mobile_content_alignment %}{% when 'left' %}flex-start{% when 'center' %}center{% when 'right' %}flex-end{% endcase %};
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    #MarketBannerCarousel-{{ section.id }} .banner__text-box {
+      text-align: {{ section.settings.mobile_content_alignment }};
+      {% if section.settings.show_text_below %}
+        color: #333;
+      {% endif %}
+    }
+    
+    #MarketBannerCarousel-{{ section.id }} .carousel__nav {
+      width: 40px;
+      height: 40px;
+    }
+    
+    #MarketBannerCarousel-{{ section.id }} .carousel__nav--prev {
+      left: 10px;
+    }
+    
+    #MarketBannerCarousel-{{ section.id }} .carousel__nav--next {
+      right: 10px;
+    }
+    
+    {% if section.settings.show_text_below %}
+      #MarketBannerCarousel-{{ section.id }} .banner__button {
+        background: #333;
+        color: #fff;
+      }
+      
+      #MarketBannerCarousel-{{ section.id }} .banner__button:hover {
+        background: #555;
+      }
+      
+      #MarketBannerCarousel-{{ section.id }} .banner__button--secondary {
+        background: transparent;
+        color: #333;
+        border: 2px solid #333;
+      }
+      
+      #MarketBannerCarousel-{{ section.id }} .banner__button--secondary:hover {
+        background: #333;
+        color: #fff;
+      }
+    {% endif %}
+  }
+</style>
+
+<div id="MarketBannerCarousel-{{ section.id }}">
+  <div class="carousel__wrapper">
+    <div class="carousel__track">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign selected_banner = blank
+        assign selected_mobile_banner = blank
+        assign selected_heading = blank
+        assign selected_text = blank
+        assign selected_button_text = blank
+        assign selected_button_link = blank
+        assign selected_banner_link = blank
+        
+        case user_market
+          when 'india'
+            assign selected_banner = block.settings.india_image
+            assign selected_mobile_banner = block.settings.india_mobile_image
+            assign selected_heading = block.settings.india_heading
+            assign selected_text = block.settings.india_text
+            assign selected_button_text = block.settings.india_button_text
+            assign selected_button_link = block.settings.india_button_link
+            assign selected_banner_link = block.settings.india_banner_link
+          when 'usa'
+            assign selected_banner = block.settings.usa_image
+            assign selected_mobile_banner = block.settings.usa_mobile_image
+            assign selected_heading = block.settings.usa_heading
+            assign selected_text = block.settings.usa_text
+            assign selected_button_text = block.settings.usa_button_text
+            assign selected_button_link = block.settings.usa_button_link
+            assign selected_banner_link = block.settings.usa_banner_link
+          when 'europe'
+            assign selected_banner = block.settings.europe_image
+            assign selected_mobile_banner = block.settings.europe_mobile_image
+            assign selected_heading = block.settings.europe_heading
+            assign selected_text = block.settings.europe_text
+            assign selected_button_text = block.settings.europe_button_text
+            assign selected_button_link = block.settings.europe_button_link
+            assign selected_banner_link = block.settings.europe_banner_link
+        endcase
+        
+        if selected_banner == blank
+          case user_country
+            when 'IN'
+              assign selected_banner = block.settings.india_image
+              assign selected_mobile_banner = block.settings.india_mobile_image
+              assign selected_heading = block.settings.india_heading
+              assign selected_text = block.settings.india_text
+              assign selected_button_text = block.settings.india_button_text
+              assign selected_button_link = block.settings.india_button_link
+              assign selected_banner_link = block.settings.india_banner_link
+            when 'US'
+              assign selected_banner = block.settings.usa_image
+              assign selected_mobile_banner = block.settings.usa_mobile_image
+              assign selected_heading = block.settings.usa_heading
+              assign selected_text = block.settings.usa_text
+              assign selected_button_text = block.settings.usa_button_text
+              assign selected_button_link = block.settings.usa_button_link
+              assign selected_banner_link = block.settings.usa_banner_link
+            when 'GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'CH'
+              assign selected_banner = block.settings.europe_image
+              assign selected_mobile_banner = block.settings.europe_mobile_image
+              assign selected_heading = block.settings.europe_heading
+              assign selected_text = block.settings.europe_text
+              assign selected_button_text = block.settings.europe_button_text
+              assign selected_button_link = block.settings.europe_button_link
+              assign selected_banner_link = block.settings.europe_banner_link
+          endcase
+        endif
+        
+        if selected_banner == blank
+          assign selected_banner = block.settings.default_image
+          assign selected_mobile_banner = block.settings.default_mobile_image
+          assign selected_heading = block.settings.default_heading
+          assign selected_text = block.settings.default_text
+          assign selected_button_text = block.settings.default_button_text
+          assign selected_button_link = block.settings.default_button_link
+          assign selected_banner_link = block.settings.default_banner_link
+        endif
+        
+        assign fetch_priority = 'auto'
+        if section.index == 1 and forloop.first
+          assign fetch_priority = 'high'
+        endif
+      -%}
+      
+      <div class="carousel__slide" data-slide="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        {%- if selected_banner_link != blank -%}
+          <a href="{{ selected_banner_link }}" class="banner__link">
+        {%- else -%}
+          <div class="banner__link">
+        {%- endif -%}
+          
+          {%- if selected_banner != blank -%}
+            {%- assign loading_type = 'lazy' -%}
+            {%- if forloop.first -%}
+              {%- assign loading_type = 'eager' -%}
+            {%- endif -%}
+            {{
+              selected_banner
+              | image_url: width: 3840
+              | image_tag:
+                class: 'banner__image hidden_mobile',
+                sizes: '100vw',
+                widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                fetchpriority: fetch_priority,
+                loading: loading_type
+            }}
+          {%- endif -%}
+          
+          {%- if selected_mobile_banner != blank -%}
+            {%- assign loading_type = 'lazy' -%}
+            {%- if forloop.first -%}
+              {%- assign loading_type = 'eager' -%}
+            {%- endif -%}
+            {{
+              selected_mobile_banner
+              | image_url: width: 1500
+              | image_tag:
+                class: 'banner__image hidden_desktop',
+                sizes: '100vw',
+                widths: '375, 550, 750, 1100, 1500',
+                fetchpriority: fetch_priority,
+                loading: loading_type
+            }}
+          {%- endif -%}
+          
+          <div class="banner__overlay"></div>
+          
+          {%- if selected_heading != blank or selected_text != blank or selected_button_text != blank -%}
+            <div class="banner__content">
+              <div class="banner__text-box">
+                {%- if selected_heading != blank -%}
+                  <h2 class="banner__heading {{ section.settings.heading_size }}">
+                    {{ selected_heading }}
+                  </h2>
+                {%- endif -%}
+                
+                {%- if selected_text != blank -%}
+                  <div class="banner__text {{ section.settings.text_style }}">
+                    {{ selected_text }}
+                  </div>
+                {%- endif -%}
+                
+                {%- if selected_button_text != blank -%}
+                  
+                    {% if selected_button_link == blank %}
+                      href="#" onclick="return false;"
+                    {% else %}
+                      href="{{ selected_button_link }}"
+                    {% endif %}
+                    class="banner__button{% if section.settings.button_style_secondary %} banner__button--secondary{% endif %}"
+                    onclick="event.stopPropagation();"
+                  >
+                    {{ selected_button_text | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+          
+        {%- if selected_banner_link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+    </div>
+    
+    {%- if banner_count > 1 -%}
+      {%- if section.settings.show_dots -%}
+        <div class="carousel__dots">
+          {%- for block in section.blocks -%}
+            <button class="carousel__dot{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function() {
+    const carousel = document.getElementById('MarketBannerCarousel-{{ section.id }}');
+    const track = carousel.querySelector('.carousel__track');
+    const slides = carousel.querySelectorAll('.carousel__slide');
+    const dots = carousel.querySelectorAll('.carousel__dot');
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let autoRotateInterval = null;
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID = 0;
+    
+    // Clone first and last slides for infinite loop
+    if (totalSlides > 1) {
+      const firstClone = slides[0].cloneNode(true);
+      const lastClone = slides[totalSlides - 1].cloneNode(true);
+      
+      // Remove any existing IDs to avoid conflicts
+      firstClone.removeAttribute('id');
+      lastClone.removeAttribute('id');
+      
+      // Add data attributes to identify clones
+      firstClone.setAttribute('data-clone', 'first');
+      lastClone.setAttribute('data-clone', 'last');
+      
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, slides[0]);
+      
+      // Re-query all slides after cloning
+      const allSlides = track.querySelectorAll('.carousel__slide');
+      
+      // Fix links in cloned slides
+      allSlides.forEach((slide, index) => {
+        // Get the original slide index (accounting for the prepended clone)
+        let originalIndex;
+        if (index === 0) {
+          // First slide is a clone of the last original
+          originalIndex = totalSlides - 1;
+        } else if (index === allSlides.length - 1) {
+          // Last slide is a clone of the first original
+          originalIndex = 0;
+        } else {
+          // Regular slides
+          originalIndex = index - 1;
+        }
+        
+        const originalSlide = slides[originalIndex];
+        
+        // Copy links from original to clone if it's a clone
+        if (slide.hasAttribute('data-clone')) {
+          const cloneLinks = slide.querySelectorAll('a');
+          const originalLinks = originalSlide.querySelectorAll('a');
+          
+          cloneLinks.forEach((link, i) => {
+            if (originalLinks[i]) {
+              link.href = originalLinks[i].href;
+              // Also copy onclick if it exists
+              if (originalLinks[i].onclick) {
+                link.onclick = originalLinks[i].onclick;
+              }
+            }
+          });
+        }
+      });
+    }
+    
+    function getPositionX(event) {
+      return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+    
+    function setSliderPosition() {
+      track.style.transform = `translateX(${currentTranslate}px)`;
+    }
+    
+    function showSlide(n, animate = true) {
+      if (!animate) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = 'transform 0.5s ease-in-out';
+      }
+      
+      currentSlide = n;
+      const slideWidth = slides[0].offsetWidth;
+      currentTranslate = -(currentSlide + 1) * slideWidth;
+      prevTranslate = currentTranslate;
+      
+      setSliderPosition();
+      
+      // Update dots
+      dots.forEach(d => d.classList.remove('active'));
+      const dotIndex = ((currentSlide % totalSlides) + totalSlides) % totalSlides;
+      if (dots[dotIndex]) {
+        dots[dotIndex].classList.add('active');
+      }
+      
+      // Handle infinite loop
+      if (animate) {
+        setTimeout(() => {
+          if (currentSlide >= totalSlides) {
+            showSlide(0, false);
+          } else if (currentSlide < 0) {
+            showSlide(totalSlides - 1, false);
+          }
+        }, 500);
+      }
+    }
+    
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+    
+    function touchStart(event) {
+      if (totalSlides <= 1) return;
+      isDragging = true;
+      startPos = getPositionX(event);
+      animationID = requestAnimationFrame(animation);
+      carousel.style.cursor = 'grabbing';
+    }
+    
+    function touchMove(event) {
+      if (!isDragging) return;
+      const currentPosition = getPositionX(event);
+      currentTranslate = prevTranslate + currentPosition - startPos;
+    }
+    
+    function touchEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      cancelAnimationFrame(animationID);
+      carousel.style.cursor = 'grab';
+      
+      const movedBy = currentTranslate - prevTranslate;
+      const slideWidth = slides[0].offsetWidth;
+      
+      // Swipe threshold: 20% of slide width
+      if (movedBy < -slideWidth * 0.2) {
+        nextSlide();
+      } else if (movedBy > slideWidth * 0.2) {
+        showSlide(currentSlide - 1);
+      } else {
+        showSlide(currentSlide);
+      }
+      
+      resetAutoRotate();
+    }
+    
+    function animation() {
+      setSliderPosition();
+      if (isDragging) requestAnimationFrame(animation);
+    }
+    
+    // Touch events
+    if (totalSlides > 1) {
+      track.addEventListener('touchstart', touchStart);
+      track.addEventListener('touchmove', touchMove);
+      track.addEventListener('touchend', touchEnd);
+      
+      // Mouse events
+      track.addEventListener('mousedown', touchStart);
+      track.addEventListener('mousemove', touchMove);
+      track.addEventListener('mouseup', touchEnd);
+      track.addEventListener('mouseleave', () => {
+        if (isDragging) touchEnd();
+      });
+      
+      carousel.style.cursor = 'grab';
+    }
+    
+    // Dot navigation
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        showSlide(idx);
+        resetAutoRotate();
+      });
+    });
+    
+    function startAutoRotate() {
+      {% if auto_rotate and rotation_speed > 0 %}
+        if (totalSlides > 1) {
+          autoRotateInterval = setInterval(nextSlide, {{ rotation_speed }});
+        }
+      {% endif %}
+    }
+    
+    function stopAutoRotate() {
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+      }
+    }
+    
+    function resetAutoRotate() {
+      stopAutoRotate();
+      startAutoRotate();
+    }
+    
+    // Pause on hover
+    carousel.addEventListener('mouseenter', stopAutoRotate);
+    carousel.addEventListener('mouseleave', startAutoRotate);
+    
+    // Initialize
+    showSlide(0, false);
+    startAutoRotate();
+    
+    // Handle resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        showSlide(currentSlide, false);
+      }, 250);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Market Banner Carousel",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "default": true,
+      "label": "Auto-rotate banners"
+    },
+    {
+      "type": "range",
+      "id": "rotation_speed",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "label": "Rotation speed",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "default": true,
+      "label": "Show dot navigation"
+    },
+    {
+      "type": "header",
+      "content": "Banner Settings"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "text_box_max_width",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "Text box maximum width",
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {"value": "top-left", "label": "Top left"},
+        {"value": "top-center", "label": "Top center"},
+        {"value": "top-right", "label": "Top right"},
+        {"value": "middle-left", "label": "Middle left"},
+        {"value": "middle-center", "label": "Middle center"},
+        {"value": "middle-right", "label": "Middle right"},
+        {"value": "bottom-left", "label": "Bottom left"},
+        {"value": "bottom-center", "label": "Bottom center"},
+        {"value": "bottom-right", "label": "Bottom right"}
+      ],
+      "default": "middle-center",
+      "label": "Desktop content position"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "center",
+      "label": "Desktop content alignment"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {"value": "h2", "label": "Small"},
+        {"value": "h1", "label": "Medium"},
+        {"value": "h0", "label": "Large"},
+        {"value": "hxl", "label": "Extra large"},
+        {"value": "hxxl", "label": "XX-Large"}
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "options": [
+        {"value": "body", "label": "Body"},
+        {"value": "subtitle", "label": "Subtitle"},
+        {"value": "caption-with-letter-spacing", "label": "Caption with letter spacing"}
+      ],
+      "default": "body",
+      "label": "Text style"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_style_secondary",
+      "default": false,
+      "label": "Use secondary button style"
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "center",
+      "label": "Mobile content alignment"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_text_below",
+      "default": true,
+      "label": "Show text below image on mobile"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Default Content (Fallback)"
+        },
+        {
+          "type": "image_picker",
+          "id": "default_image",
+          "label": "Default Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "default_mobile_image",
+          "label": "Default Mobile Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "default_heading",
+          "label": "Default Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "default_text",
+          "label": "Default Text"
+        },
+        {
+          "type": "text",
+          "id": "default_button_text",
+          "label": "Default Button Text"
+        },
+        {
+          "type": "url",
+          "id": "default_button_link",
+          "label": "Default Button Link"
+        },
+        {
+          "type": "url",
+          "id": "default_banner_link",
+          "label": "Default Banner Click Link"
+        },
+        {
+          "type": "header",
+          "content": "India Market"
+        },
+        {
+          "type": "image_picker",
+          "id": "india_image",
+          "label": "India Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "india_mobile_image",
+          "label": "India Mobile Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "india_heading",
+          "label": "India Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "india_text",
+          "label": "India Text"
+        },
+        {
+          "type": "text",
+          "id": "india_button_text",
+          "label": "India Button Text"
+        },
+        {
+          "type": "url",
+          "id": "india_button_link",
+          "label": "India Button Link"
+        },
+        {
+          "type": "url",
+          "id": "india_banner_link",
+          "label": "India Banner Click Link"
+        },
+        {
+          "type": "header",
+          "content": "USA Market"
+        },
+        {
+          "type": "image_picker",
+          "id": "usa_image",
+          "label": "USA Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "usa_mobile_image",
+          "label": "USA Mobile Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "usa_heading",
+          "label": "USA Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "usa_text",
+          "label": "USA Text"
+        },
+        {
+          "type": "text",
+          "id": "usa_button_text",
+          "label": "USA Button Text"
+        },
+        {
+          "type": "url",
+          "id": "usa_button_link",
+          "label": "USA Button Link"
+        },
+        {
+          "type": "url",
+          "id": "usa_banner_link",
+          "label": "USA Banner Click Link"
+        },
+        {
+          "type": "header",
+          "content": "Europe Market"
+        },
+        {
+          "type": "image_picker",
+          "id": "europe_image",
+          "label": "Europe Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "europe_mobile_image",
+          "label": "Europe Mobile Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "europe_heading",
+          "label": "Europe Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "europe_text",
+          "label": "Europe Text"
+        },
+        {
+          "type": "text",
+          "id": "europe_button_text",
+          "label": "Europe Button Text"
+        },
+        {
+          "type": "url",
+          "id": "europe_button_link",
+          "label": "Europe Button Link"
+        },
+        {
+          "type": "url",
+          "id": "europe_banner_link",
+          "label": "Europe Banner Click Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Market Banner Carousel",
+      "blocks": [
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

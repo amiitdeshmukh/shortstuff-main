@@ -1,0 +1,566 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* You May Also Like Section - Isolated Styles */
+  .you-may-also-like-{{ section.id }} {
+    background-color: {{ section.settings.bg_color | default: '#FFFFFF' }};
+    position: relative;
+    isolation: isolate;
+  }
+
+  .you-may-also-like-{{ section.id }} .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .you-may-also-like-{{ section.id }} .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  .you-may-also-like-{{ section.id }} .nav-controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  .you-may-also-like-{{ section.id }} .nav-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid {{ section.settings.button_border_color | default: '#CCCCCC' }};
+    background-color: {{ section.settings.button_bg_color | default: '#FFFFFF' }};
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    color: {{ section.settings.button_text_color | default: '#333333' }};
+    user-select: none;
+  }
+
+  .you-may-also-like-{{ section.id }} .nav-btn:hover {
+    background-color: {{ section.settings.button_hover_bg | default: '#F5F5F5' }};
+    border-color: {{ section.settings.button_hover_border | default: '#999999' }};
+  }
+
+  .you-may-also-like-{{ section.id }} .nav-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .you-may-also-like-{{ section.id }} .products-slider {
+    position: relative;
+    overflow: hidden;
+    padding-top: 40px;
+  }
+
+  .you-may-also-like-{{ section.id }} .products-track {
+    display: flex;
+    transition: transform 0.3s ease;
+    gap: 20px;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-item {
+    flex: 0 0 calc(25% - 15px);
+    background-color: {{ section.settings.card_bg_color | default: '#FFFFFF' }};
+    border: 1px solid {{ section.settings.card_border_color | default: '#E8E4DC' }};
+    border-radius: {{ section.settings.card_border_radius | default: 12 }}px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-item:hover .product-img {
+    transform: scale(1.05);
+  }
+
+  .you-may-also-like-{{ section.id }} .product-details {
+    padding: 16px;
+    text-align: left;
+  }
+
+  .you-may-also-like-{{ section.id }} .product-name {
+    font-size: {{ section.settings.product_title_size | default: 14 }}px;
+    font-weight: 500;
+    color: {{ section.settings.product_title_color | default: '#333333' }};
+    line-height: 1.3;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: var(--font-body-family);
+  }
+
+  .you-may-also-like-{{ section.id }} .product-pricing {
+    font-size: {{ section.settings.product_price_size | default: 16 }}px;
+    font-weight: 600;
+    color: {{ section.settings.product_price_color | default: '#D4956B' }};
+    font-family: var(--font-body-family);
+  }
+
+  .you-may-also-like-{{ section.id }} .price-compare {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 8px;
+    font-weight: normal;
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 1024px) {
+    .you-may-also-like-{{ section.id }} .product-item {
+      flex: 0 0 calc(50% - 10px);
+    }
+
+    .you-may-also-like-{{ section.id }} .products-slider {
+      padding-top: 35px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .you-may-also-like-{{ section.id }} .container {
+      padding: 0 1rem;
+    }
+
+    .you-may-also-like-{{ section.id }} .product-item {
+      flex: 0 0 calc(100% - 10px);
+    }
+
+    .you-may-also-like-{{ section.id }} .product-image-wrapper {
+      height: 350px;
+    }
+
+    .you-may-also-like-{{ section.id }} .section-header {
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .you-may-also-like-{{ section.id }} .products-slider {
+      padding-top: 30px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding you-may-also-like-{{ section.id }}">
+  <div class="container">
+    
+    <!-- Product Recommendations Container -->
+    <product-recommendations 
+      class="product-recommendations"
+      data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_limit | default: 4 }}"
+      data-section-id="{{ section.id }}"
+    >
+      
+      <!-- This content will be loaded via AJAX -->
+      {% if recommendations.performed and recommendations.products_count > 0 %}
+        
+        <!-- Header -->
+        <div class="section-header">
+          <h2 class="h1" style="color: #8B4513;">{{ section.settings.heading | default: 'You May Also Like' }}</h2>
+          <div class="nav-controls">
+            <button class="nav-btn nav-prev" data-section-id="{{ section.id }}">
+              &#8249;
+            </button>
+            <button class="nav-btn nav-next" data-section-id="{{ section.id }}">
+              &#8250;
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Slider -->
+        <div class="products-slider" id="slider-{{ section.id }}">
+          <div class="products-track" id="track-{{ section.id }}">
+            
+            {% for recommended_product in recommendations.products %}
+              <a href="{{ recommended_product.url }}" class="product-item">
+                <div class="product-image-wrapper">
+                  {% if recommended_product.featured_image != blank %}
+                    <img 
+                      src="{{ recommended_product.featured_image | image_url: width: 400 }}" 
+                      alt="{{ recommended_product.featured_image.alt | default: recommended_product.title }}"
+                      class="product-img"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div class="product-img" style="background: linear-gradient(135deg, #F8F6F1 0%, #E8E4DC 100%); display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px;">
+                      No Image
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="product-details">
+                  <h3 class="product-name">{{ recommended_product.title | escape }}</h3>
+                  <div class="product-pricing">
+                    {% if recommended_product.compare_at_price > recommended_product.price %}
+                      <span class="price-compare">{{ recommended_product.compare_at_price | money }}</span>
+                    {% endif %}
+                    {{ recommended_product.price | money }}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+
+          </div>
+        </div>
+        
+      {% endif %}
+      
+    </product-recommendations>
+    
+  </div>
+</div>
+
+<script>
+// Product Recommendations Loader
+class ProductRecommendations extends HTMLElement {
+  constructor() {
+    super();
+    
+    const handleIntersection = (entries, observer) => {
+      if (!entries[0].isIntersecting) return;
+      observer.unobserve(this);
+      
+      fetch(this.dataset.url)
+        .then(response => response.text())
+        .then(text => {
+          const html = document.createElement('div');
+          html.innerHTML = text;
+          const recommendations = html.querySelector('product-recommendations');
+          
+          if (recommendations && recommendations.innerHTML.trim().length) {
+            this.innerHTML = recommendations.innerHTML;
+            // Initialize slider after content loads
+            setTimeout(() => {
+              initializeSlider(this.dataset.sectionId);
+            }, 100);
+          }
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    };
+
+    new IntersectionObserver(handleIntersection.bind(this), { rootMargin: '0px 0px 200px 0px' }).observe(this);
+  }
+}
+
+customElements.define('product-recommendations', ProductRecommendations);
+
+// Slider functionality
+const sliderStates = {};
+
+function initializeSlider(sectionId) {
+  // Initialize state
+  sliderStates[sectionId] = { currentIndex: 0 };
+  
+  const prevBtn = document.querySelector(`.you-may-also-like-${sectionId} .nav-prev`);
+  const nextBtn = document.querySelector(`.you-may-also-like-${sectionId} .nav-next`);
+  
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => slideProducts(sectionId, -1));
+    nextBtn.addEventListener('click', () => slideProducts(sectionId, 1));
+    
+    // Initial button state update
+    updateButtonStates(sectionId);
+  }
+}
+
+function slideProducts(sectionId, direction) {
+  const track = document.getElementById(`track-${sectionId}`);
+  if (!track) return;
+  
+  const items = track.querySelectorAll('.product-item');
+  const totalItems = items.length;
+  
+  if (totalItems === 0) return;
+  
+  // Get items per view based on screen width
+  function getItemsPerView() {
+    if (window.innerWidth <= 600) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 4;
+  }
+  
+  const itemsPerView = getItemsPerView();
+  const maxIndex = Math.max(0, totalItems - itemsPerView);
+  
+  // Update current index
+  sliderStates[sectionId].currentIndex += direction;
+  
+  // Keep within bounds
+  if (sliderStates[sectionId].currentIndex < 0) {
+    sliderStates[sectionId].currentIndex = 0;
+  } else if (sliderStates[sectionId].currentIndex > maxIndex) {
+    sliderStates[sectionId].currentIndex = maxIndex;
+  }
+  
+  // Calculate transform
+  const itemWidth = items[0] ? items.offsetWidth : 0;
+  const gap = 20;
+  const translateX = -(sliderStates[sectionId].currentIndex * (itemWidth + gap));
+  
+  track.style.transform = `translateX(${translateX}px)`;
+  
+  // Update button states
+  updateButtonStates(sectionId);
+}
+
+function updateButtonStates(sectionId) {
+  const track = document.getElementById(`track-${sectionId}`);
+  if (!track) return;
+  
+  const items = track.querySelectorAll('.product-item');
+  const totalItems = items.length;
+  
+  function getItemsPerView() {
+    if (window.innerWidth <= 600) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 4;
+  }
+  
+  const itemsPerView = getItemsPerView();
+  const maxIndex = Math.max(0, totalItems - itemsPerView);
+  
+  const prevBtn = document.querySelector(`.you-may-also-like-${sectionId} .nav-prev`);
+  const nextBtn = document.querySelector(`.you-may-also-like-${sectionId} .nav-next`);
+  
+  if (prevBtn && nextBtn) {
+    prevBtn.classList.toggle('disabled', sliderStates[sectionId].currentIndex <= 0);
+    nextBtn.classList.toggle('disabled', sliderStates[sectionId].currentIndex >= maxIndex);
+  }
+}
+
+// Reset on window resize
+window.addEventListener('resize', function() {
+  Object.keys(sliderStates).forEach(sectionId => {
+    sliderStates[sectionId].currentIndex = 0;
+    const track = document.getElementById(`track-${sectionId}`);
+    if (track) {
+      track.style.transform = 'translateX(0px)';
+      updateButtonStates(sectionId);
+    }
+  });
+});
+
+// Initialize any existing sliders on page load
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('product-recommendations').forEach(element => {
+    if (element.innerHTML.trim().length > 0) {
+      const sectionId = element.dataset.sectionId;
+      if (sectionId) {
+        setTimeout(() => {
+          initializeSlider(sectionId);
+        }, 100);
+      }
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "You May Also Like",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Products to Show",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#E8E4DC"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Section Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Product Title Size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product Title Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "product_price_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Product Price Size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "product_price_color",
+      "label": "Product Price Color",
+      "default": "#D4956B"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Buttons"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button Border",
+      "default": "#CCCCCC"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button Hover Background",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border",
+      "label": "Button Hover Border",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "You May Also Like",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

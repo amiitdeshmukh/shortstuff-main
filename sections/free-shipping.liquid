@@ -1,0 +1,891 @@
+<style>
+  .free-shipping-independent {
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px 0;
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: {{ section.settings.section_border_radius_top }}px;
+    border-top-right-radius: {{ section.settings.section_border_radius_top }}px;
+    border-bottom-left-radius: {{ section.settings.section_border_radius_bottom }}px;
+    border-bottom-right-radius: {{ section.settings.section_border_radius_bottom }}px;
+  }
+
+  .free-shipping-independent .shipping-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Static Decorative Icons - No Floating */
+  .free-shipping-independent .static-giraffe {
+    position: absolute;
+    top: {{ section.settings.giraffe_top_desktop }}%;
+    left: {{ section.settings.giraffe_left_desktop }}%;
+    width: {{ section.settings.giraffe_size_desktop }}px;
+    z-index: 1;
+    opacity: 0.9;
+  }
+
+  .free-shipping-independent .static-leaf {
+    position: absolute;
+    bottom: {{ section.settings.leaf_bottom_desktop }}%;
+    right: {{ section.settings.leaf_right_desktop }}%;
+    width: {{ section.settings.leaf_size_desktop }}px;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  /* Section Header */
+  .free-shipping-independent .shipping-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 0;
+    padding-top: 0;
+    position: relative;
+  }
+
+  .free-shipping-independent .shipping-title {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: bold;
+    color: {{ section.settings.title_color }};
+    margin-bottom: 1rem;
+    margin-top: 0;
+    line-height: 1.2;
+  }
+
+  /* Curvy Line Icon */
+  .free-shipping-independent .shipping-curvy-line-icon {
+    display: block;
+    position: absolute;
+    left: {{ section.settings.curvy_line_x_position }}%;
+    transform: translateX(-50%);
+    top: {{ section.settings.curvy_line_y_position }}px;
+    width: {{ section.settings.curvy_line_size }}px;
+    height: auto;
+    z-index: 3;
+  }
+
+  .free-shipping-independent .shipping-description {
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.description_color }};
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Shipping Cards Grid */
+  .free-shipping-independent .shipping-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .free-shipping-independent .shipping-card {
+    background: white;
+    border-radius: {{ section.settings.card_border_radius }}px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: {{ section.settings.card_shadow_x }}px {{ section.settings.card_shadow_y }}px {{ section.settings.card_shadow_blur }}px rgba(0, 0, 0, {{ section.settings.card_shadow_opacity | divided_by: 100.0 }});
+    transition: all 0.3s ease;
+    position: relative;
+    border: {{ section.settings.card_border_width }}px solid {{ section.settings.card_border_color }};
+  }
+
+  .free-shipping-independent .shipping-card:hover {
+    transform: translateY(-0px);
+    box-shadow: {{ section.settings.card_shadow_hover_x }}px {{ section.settings.card_shadow_hover_y }}px {{ section.settings.card_shadow_hover_blur }}px rgba(0, 0, 0, {{ section.settings.card_shadow_hover_opacity | divided_by: 100.0 }});
+  }
+
+  .free-shipping-independent .shipping-icon {
+    width: {{ section.settings.icon_size }}px;
+    height: {{ section.settings.icon_size }}px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: {{ section.settings.icon_font_size }}px;
+  }
+
+  .free-shipping-independent .shipping-icon img {
+    width: {{ section.settings.icon_image_size }}px;
+    height: {{ section.settings.icon_image_size }}px;
+    object-fit: contain;
+  }
+
+  .free-shipping-independent .shipping-card-title {
+    font-size: {{ section.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ section.settings.card_title_color }};
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .free-shipping-independent .shipping-card-description {
+    font-size: {{ section.settings.card_desc_size }}px;
+    color: {{ section.settings.card_desc_color }};
+    line-height: 1.6;
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 768px) {
+    .free-shipping-independent {
+      padding: {{ section.settings.section_padding_top_mobile }}px 0 {{ section.settings.section_padding_bottom_mobile }}px 0;
+    }
+
+    .free-shipping-independent .shipping-container {
+      padding: 0 1rem;
+    }
+
+    .free-shipping-independent .shipping-title {
+      font-size: {{ section.settings.title_size | times: 0.8 }}px;
+    }
+
+    .free-shipping-independent .shipping-curvy-line-icon {
+      width: {{ section.settings.curvy_line_size_mobile }}px;
+      top: {{ section.settings.curvy_line_y_position_mobile }}px;
+      left: {{ section.settings.curvy_line_x_position_mobile }}%;
+    }
+
+    .free-shipping-independent .shipping-description {
+      font-size: {{ section.settings.description_size | times: 0.9 }}px;
+    }
+
+    .free-shipping-independent .shipping-cards {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .free-shipping-independent .shipping-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .free-shipping-independent .shipping-icon {
+      width: {{ section.settings.icon_size | times: 0.8 }}px;
+      height: {{ section.settings.icon_size | times: 0.8 }}px;
+      margin-bottom: 1rem;
+      font-size: {{ section.settings.icon_font_size | times: 0.8 }}px;
+    }
+
+    .free-shipping-independent .static-giraffe {
+      top: {{ section.settings.giraffe_top_mobile }}% !important;
+      left: {{ section.settings.giraffe_left_mobile }}% !important;
+      width: {{ section.settings.giraffe_size_mobile }}px !important;
+    }
+
+    .free-shipping-independent .static-leaf {
+      bottom: {{ section.settings.leaf_bottom_mobile }}% !important;
+      right: {{ section.settings.leaf_right_mobile }}% !important;
+      width: {{ section.settings.leaf_size_mobile }}px !important;
+    }
+  }
+
+  /* Tablet */
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    .free-shipping-independent .shipping-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (min-width: 1025px) {
+    .free-shipping-independent .shipping-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
+
+<section class="free-shipping-independent">
+  <!-- Static Decorative Icons -->
+  {% if section.settings.giraffe_icon != blank %}
+    <img
+      src="{{ section.settings.giraffe_icon | image_url: width: 200 }}"
+      alt="Giraffe decoration"
+      class="static-giraffe"
+      loading="lazy"
+    >
+  {% endif %}
+
+  {% if section.settings.leaf_icon != blank %}
+    <img
+      src="{{ section.settings.leaf_icon | image_url: width: 200 }}"
+      alt="Leaf decoration"
+      class="static-leaf"
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="shipping-container">
+    <!-- Section Header -->
+    <div class="shipping-header">
+      {% if section.settings.title != blank %}
+        <h2 class="shipping-title">{{ section.settings.title | escape }}</h2>
+      {% endif %}
+
+      <!-- Curvy Line Icon -->
+      {% if section.settings.curvy_line_icon != blank %}
+        <img
+          src="{{ section.settings.curvy_line_icon | image_url: width: 400 }}"
+          alt="Decorative curvy line"
+          class="shipping-curvy-line-icon"
+          loading="lazy"
+        >
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="shipping-description">{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Shipping Cards -->
+    <div class="shipping-cards">
+      {% for block in section.blocks %}
+        <div class="shipping-card" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}
+            <div class="shipping-icon">
+              <img
+                src="{{ block.settings.icon | image_url: width: 80 }}"
+                alt="{{ block.settings.icon.alt | default: block.settings.title }}"
+                loading="lazy"
+              >
+            </div>
+          {% else %}
+            <div class="shipping-icon">
+              <span>{{ block.settings.icon_text | default: '✨' }}</span>
+            </div>
+          {% endif %}
+
+          {% if block.settings.title != blank %}
+            <h3 class="shipping-card-title">{{ block.settings.title | escape }}</h3>
+          {% endif %}
+
+          {% if block.settings.description != blank %}
+            <p class="shipping-card-description">{{ block.settings.description | escape }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Free Shipping",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FEFEFE"
+    },
+    {
+      "type": "header",
+      "content": "Section Border Radius"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius_top",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Top Border Radius",
+      "default": 0,
+      "info": "Rounds the top corners of the section"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom Border Radius",
+      "default": 0,
+      "info": "Rounds the bottom corners of the section"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "header",
+      "content": "Curvy Line Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "curvy_line_icon",
+      "label": "Upload Curvy Line Icon (SVG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_size",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_y_position",
+      "min": -20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Y Position (from title)",
+      "default": 45,
+      "info": "Negative values will overlap the title"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_x_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop X Position (left to right)",
+      "default": 50,
+      "info": "50% = center, 0% = left, 100% = right"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_size_mobile",
+      "min": 40,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_y_position_mobile",
+      "min": -15,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Y Position (from title)",
+      "default": 35,
+      "info": "Negative values will overlap the title"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_x_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile X Position (left to right)",
+      "default": 50,
+      "info": "50% = center, 0% = left, 100% = right"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Font Size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 16,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Title Font Size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "min": 13,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Description Font Size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Card Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "icon_bg_color",
+      "label": "Icon Background Color",
+      "default": "#E8F4F8"
+    },
+    {
+      "type": "header",
+      "content": "Card Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card Border"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Width",
+      "default": 1,
+      "info": "Set to 0 for no border"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border Color",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "header",
+      "content": "Card Shadow (Normal State)"
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_x",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow Horizontal Offset",
+      "default": 0,
+      "info": "Positive = right, Negative = left"
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_y",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow Vertical Offset",
+      "default": 4,
+      "info": "Positive = down, Negative = up"
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_blur",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Shadow Blur Radius",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Shadow Opacity",
+      "default": 10,
+      "info": "0 = transparent, 100 = solid black"
+    },
+    {
+      "type": "header",
+      "content": "Card Shadow (Hover State)"
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_hover_x",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Hover Shadow X Offset",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_hover_y",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Hover Shadow Y Offset",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_hover_blur",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Hover Shadow Blur",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "card_shadow_hover_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Hover Shadow Opacity",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Card Icons"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Container Size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_image_size",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Image Size",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_font_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon Text Size (for emojis)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Static Giraffe Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "giraffe_icon",
+      "label": "Giraffe Icon (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "giraffe_size_desktop",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "giraffe_size_mobile",
+      "min": 30,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "giraffe_top_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop Top Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "giraffe_left_desktop",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Desktop Left Position",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "giraffe_top_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Top Position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "giraffe_left_mobile",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile Left Position",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Static Leaf Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "leaf_icon",
+      "label": "Leaf Icon (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "leaf_size_desktop",
+      "min": 30,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "leaf_size_mobile",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "leaf_bottom_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop Bottom Position",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "leaf_right_desktop",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Desktop Right Position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "leaf_bottom_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Bottom Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "leaf_right_mobile",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile Right Position",
+      "default": 6
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shipping_benefit",
+      "name": "Shipping Benefit",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Benefit Icon (PNG recommended)"
+        },
+        {
+          "type": "text",
+          "id": "icon_text",
+          "label": "Icon Text (if no image)",
+          "default": "🚚",
+          "info": "Used only if no icon image is uploaded"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Benefit Title",
+          "default": "Fast Delivery"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Benefit Description",
+          "default": "Free shipping on all orders over $50. Get your products delivered right to your doorstep."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Free Shipping",
+      "blocks": [
+        {
+          "type": "shipping_benefit",
+          "settings": {
+            "title": "Free Delivery",
+            "description": "Free shipping on all orders over $50. Get your products delivered right to your doorstep.",
+            "icon_text": "🚚"
+          }
+        },
+        {
+          "type": "shipping_benefit",
+          "settings": {
+            "title": "Fast Processing",
+            "description": "Orders are processed within 24 hours and shipped out quickly to reach you on time.",
+            "icon_text": "⚡"
+          }
+        },
+        {
+          "type": "shipping_benefit",
+          "settings": {
+            "title": "Track Your Order",
+            "description": "Stay updated with real-time tracking information for your shipment.",
+            "icon_text": "📦"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

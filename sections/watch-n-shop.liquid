@@ -1,0 +1,444 @@
+<style>
+  .watch-shop-section {
+    background-color: {{ section.settings.background_color }};
+    padding-top: {{ section.settings.section_padding_top }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    position: relative;
+  }
+
+  .watch-shop-container {
+    max-width: 1438px;
+    margin: 0 auto;
+    padding: 0 57px;
+  }
+
+  .watch-shop-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 800;
+    color: {{ section.settings.title_color }};
+    text-align: center;
+    margin: 0 0 {{ section.settings.title_margin_bottom }}px 0;
+    line-height: 1.2;
+  }
+
+  /* Desktop Grid - 4 Columns */
+  .watch-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: {{ section.settings.card_gap }}px;
+  }
+
+  .watch-shop-card {
+    background: white;
+    border: {{ section.settings.card_border_width }}px solid {{ section.settings.card_border_color }};
+    border-radius: {{ section.settings.card_border_radius }}px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .watch-shop-media {
+    width: 100%;
+    height: {{ section.settings.media_height }}px;
+    background: #f5f5f5;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .watch-shop-media img,
+  .watch-shop-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .watch-shop-content {
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .watch-shop-link {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: {{ section.settings.link_size }}px;
+    font-weight: bold;
+    color: {{ section.settings.text_color }};
+    text-decoration: underline;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  .watch-shop-link:hover {
+    color: {{ section.settings.title_color }};
+  }
+
+  .watch-shop-description {
+    font-family: 'Source Serif 4', serif;
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.text_color }};
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Mobile - Horizontal Scroll */
+  @media screen and (max-width: 768px) {
+    .watch-shop-container {
+      padding: 0 20px;
+    }
+
+    .watch-shop-title {
+      font-size: {{ section.settings.title_size | times: 0.7 }}px;
+      margin-bottom: {{ section.settings.title_margin_bottom_mobile }}px;
+    }
+
+    .watch-shop-grid {
+      display: flex;
+      grid-template-columns: none;
+      gap: 15px;
+      overflow-x: auto;
+      overflow-y: visible;
+      flex-wrap: nowrap;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 20px 20px 20px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .watch-shop-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .watch-shop-card {
+      flex: 0 0 {{ section.settings.card_width_mobile }}px;
+      width: {{ section.settings.card_width_mobile }}px;
+      scroll-snap-align: start;
+    }
+
+    .watch-shop-media {
+      height: {{ section.settings.media_height_mobile }}px;
+    }
+
+    .watch-shop-content {
+      padding: 16px;
+      gap: 8px;
+    }
+
+    .watch-shop-link {
+      font-size: {{ section.settings.link_size | times: 0.9 }}px;
+    }
+
+    .watch-shop-description {
+      font-size: {{ section.settings.description_size | times: 0.9 }}px;
+    }
+  }
+
+  /* Tablet */
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    .watch-shop-container {
+      padding: 0 30px;
+    }
+
+    .watch-shop-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+  }
+</style>
+
+<section class="watch-shop-section">
+  <div class="watch-shop-container">
+    {% if section.settings.title != blank %}
+      <h2 class="watch-shop-title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="watch-shop-grid">
+      {% for block in section.blocks %}
+        <div class="watch-shop-card" {{ block.shopify_attributes }}>
+          <div class="watch-shop-media">
+            {% if block.settings.video != blank %}
+              {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true }}
+            {% elsif block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 700 }}"
+                alt="{{ block.settings.image.alt | default: 'Product video' }}"
+                loading="lazy"
+              >
+            {% else %}
+              <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-size: 14px;">
+                Add Video or Image
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="watch-shop-content">
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}" class="watch-shop-link">
+                {{ block.settings.link_text | default: "Shop Now" }}
+              </a>
+            {% else %}
+              <p class="watch-shop-link">{{ block.settings.link_text | default: "Shop Now" }}</p>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <p class="watch-shop-description">{{ block.settings.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Watch and Shop",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFCF6"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Watch and Shop"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Font Size",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#682809"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Title Bottom Margin",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom_mobile",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Title Bottom Margin",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Desktop Card Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Gap",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "id": "media_height",
+      "min": 300,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Video/Image Height",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#FFDB9D"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Mobile Card Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "min": 200,
+      "max": 350,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Width",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "media_height_mobile",
+      "min": 250,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Video/Image Height",
+      "default": 340
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Link Font Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Font Size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1A1A1A"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video/Image Card",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Upload Video",
+          "info": "Upload MP4, MOV, or WebM video file"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (Fallback)",
+          "info": "Shown if no video is uploaded"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL",
+          "info": "Product or collection page URL"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Watch it even before you buy it!"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Watch and Shop",
+      "blocks": [
+        {
+          "type": "video_card"
+        },
+        {
+          "type": "video_card"
+        },
+        {
+          "type": "video_card"
+        },
+        {
+          "type": "video_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

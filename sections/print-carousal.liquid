@@ -1,0 +1,920 @@
+<style>
+  .shop-by-print-section {
+    background-color: {{ section.settings.background_color }};
+    {% if section.settings.background_image != blank %}
+      background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% endif %}
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    position: relative;
+    overflow: visible;
+    border-radius: {{ section.settings.top_border_radius }}px {{ section.settings.top_border_radius }}px 0 0;
+  }
+
+  /* Overlap extension element */
+  .shop-by-print-section::after {
+    content: '';
+    position: absolute;
+    bottom: -{{ section.settings.section_overlap }}px;
+    left: 0;
+    right: 0;
+    height: {{ section.settings.section_overlap }}px;
+    background-color: {{ section.settings.background_color }};
+    {% if section.settings.background_image != blank %}
+      background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% endif %}
+    z-index: -1;
+  }
+
+  .shop-by-print-container {
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  /* Static Decorative Icon */
+  .floating-hand {
+    position: absolute;
+    top: {{ section.settings.icon_top_desktop }}%;
+    right: {{ section.settings.icon_right_desktop }}%;
+    width: {{ section.settings.icon_size_desktop }}px;
+    height: {{ section.settings.icon_size_desktop }}px;
+    object-fit: contain;
+    z-index: 1;
+  }
+
+  /* Header Section */
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: bold;
+    color: {{ section.settings.title_color }} !important;
+    margin: 0;
+    line-height: 1.2;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* Curvy line decoration under heading */
+  .section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -{{ section.settings.line_icon_overlap }}px;
+    width: {{ section.settings.line_icon_width }}px;
+    height: {{ section.settings.line_icon_height }}px;
+    background-image: url("{{ section.settings.line_icon | image_url }}");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    z-index: 1;
+  }
+
+  .section-title-wrapper {
+    margin-bottom: {{ section.settings.line_icon_spacing }}px;
+  }
+
+  .section-description {
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.description_color }} !important;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  .section-description p {
+    color: {{ section.settings.description_color }} !important;
+    margin: 0;
+  }
+
+  /* Navigation Arrows */
+  .navigation-arrows {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+  }
+
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    border: 2px solid {{ section.settings.nav_button_color }};
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: {{ section.settings.nav_button_color }};
+  }
+
+  .nav-arrow:hover {
+    background-color: {{ section.settings.nav_button_color }};
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .nav-arrow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Product Grid - Viewport for 4 cards */
+  .product-grid {
+    overflow: hidden;
+    position: relative;
+    max-width: calc(4 * 240px + 3 * 26px); /* 1038px */
+    margin: 0 auto;
+  }
+
+  .product-track {
+    display: flex;
+    gap: 26px;
+    transition: transform 0.5s ease;
+    cursor: grab;
+    justify-content: flex-start;
+  }
+
+  .product-track:active {
+    cursor: grabbing;
+  }
+
+  .product-track.dragging {
+    transition: none;
+  }
+
+  .print-card {
+    flex: 0 0 240px;
+    width: 240px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    user-select: none;
+  }
+
+  .print-card__image-wrapper {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .print-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .print-card__content {
+    height: 120px;
+    padding: 1.2rem 1rem;
+    background: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .print-card__title {
+    font-size: {{ section.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ section.settings.card_title_color }} !important;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+  }
+
+  .print-card__description {
+    font-size: {{ section.settings.card_desc_size }}px;
+    color: {{ section.settings.card_desc_color }} !important;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 768px) {
+    .shop-by-print-section {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    }
+
+    .shop-by-print-container {
+      padding: 0 1rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: {{ section.settings.title_size | times: 0.8 }}px;
+    }
+
+    .section-title::after {
+      width: {{ section.settings.line_icon_width | times: 0.8 }}px;
+      height: {{ section.settings.line_icon_height | times: 0.8 }}px;
+      bottom: -{{ section.settings.line_icon_overlap | times: 0.8 }}px;
+    }
+
+    .section-title-wrapper {
+      margin-bottom: {{ section.settings.line_icon_spacing | times: 0.7 }}px;
+    }
+
+    .section-description {
+      font-size: {{ section.settings.description_size | times: 0.9 }}px;
+      margin-bottom: 2rem;
+    }
+
+    .print-card {
+      flex: 0 0 240px;
+      width: 240px;
+    }
+
+    .floating-hand {
+      top: {{ section.settings.icon_top_mobile }}% !important;
+      right: {{ section.settings.icon_right_mobile }}% !important;
+      width: {{ section.settings.icon_size_mobile }}px !important;
+      height: {{ section.settings.icon_size_mobile }}px !important;
+    }
+  }
+
+  /* Desktop - Larger cards */
+  @media screen and (min-width: 1200px) {
+    .product-grid {
+      max-width: calc(4 * 260px + 3 * 26px); /* 1118px */
+    }
+    .print-card {
+      flex: 0 0 260px;
+      width: 260px;
+    }
+  }
+</style>
+
+<section class="shop-by-print-section">
+  <!-- Static Decorative Icon -->
+  {% if section.settings.floating_icon != blank %}
+    <img
+      src="{{ section.settings.floating_icon | image_url: width: 120 }}"
+      alt="Decorative icon"
+      class="floating-hand"
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="shop-by-print-container">
+    <!-- Header -->
+    <div class="section-header">
+      {% if section.settings.title != blank %}
+        <div class="section-title-wrapper">
+          <h2 class="section-title">{{ section.settings.title | escape }}</h2>
+        </div>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="section-description">{{ section.settings.description }}</div>
+      {% endif %}
+
+      <!-- Navigation Arrows -->
+      <div class="navigation-arrows">
+        <button class="nav-arrow nav-prev" aria-label="Previous">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M10 2L4 8l6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="nav-arrow nav-next" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M6 2l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Cards -->
+    <div class="product-grid">
+      <div class="product-track">
+        {% for block in section.blocks %}
+          <div class="print-card" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <div class="print-card__image-wrapper">
+                {% if block.settings.link != blank %}
+                  <a href="{{ block.settings.link }}">
+                {% endif %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 500 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                  class="print-card__image"
+                  loading="lazy"
+                >
+                {% if block.settings.link != blank %}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="print-card__content">
+              {% if block.settings.title != blank %}
+                <h3 class="print-card__title">{{ block.settings.title | escape }}</h3>
+              {% endif %}
+
+              {% if block.settings.description != blank %}
+                <p class="print-card__description">{{ block.settings.description | escape }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.product-track');
+    const prevBtn = document.querySelector('.nav-prev');
+    const nextBtn = document.querySelector('.nav-next');
+    const cards = document.querySelectorAll('.print-card');
+
+    if (!track || !cards.length || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslateX = 0;
+    let dragStartX = 0;
+    let dragStartTime = 0;
+
+    const dragThreshold = 50;
+    const velocityThreshold = 0.5;
+
+    function updateCarousel(animate = true) {
+      if (animate && !isDragging) {
+        track.style.transition = 'transform 0.5s ease';
+      } else {
+        track.style.transition = 'none';
+      }
+
+      // Get actual card width dynamically (handles 240px and 260px)
+      const firstCard = cards[0];
+      const cardWidth = firstCard ? firstCard.offsetWidth : 240;
+      const gap = 26; // 2rem gap between cards
+      const containerWidth = track.parentElement.offsetWidth;
+
+      // Calculate total width of all cards
+      const totalCardsWidth = (cards.length * cardWidth) + ((cards.length - 1) * gap);
+      
+      // If all cards fit, center them and disable navigation
+      if (totalCardsWidth <= containerWidth) {
+        track.style.justifyContent = 'center';
+        track.style.transform = 'translateX(0px)';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        prevBtn.style.opacity = '0.5';
+        nextBtn.style.opacity = '0.5';
+        return;
+      } else {
+        track.style.justifyContent = 'flex-start';
+      }
+
+      // Calculate maximum scroll distance (when last card is at right edge)
+      const maxTranslate = totalCardsWidth - containerWidth;
+      const totalCardSpace = cardWidth + gap;
+      
+      // Calculate current translate based on index
+      const currentTranslate = currentIndex * totalCardSpace;
+      
+      // Clamp the translation to valid range
+      const translateX = -Math.min(currentTranslate, maxTranslate) + (isDragging ? currentTranslateX : 0);
+      track.style.transform = 'translateX(' + translateX + 'px)';
+
+      // Update button states
+      prevBtn.disabled = currentIndex <= 0;
+      nextBtn.disabled = currentTranslate >= maxTranslate;
+
+      prevBtn.style.opacity = currentIndex <= 0 ? '0.5' : '1';
+      nextBtn.style.opacity = currentTranslate >= maxTranslate ? '0.5' : '1';
+    }
+
+    function goNext() {
+      // Calculate if we can scroll more
+      const firstCard = cards[0];
+      const cardWidth = firstCard ? firstCard.offsetWidth : 240;
+      const gap = 26;
+      const containerWidth = track.parentElement.offsetWidth;
+      const totalCardSpace = cardWidth + gap;
+      const totalCardsWidth = (cards.length * cardWidth) + ((cards.length - 1) * gap);
+      const maxTranslate = totalCardsWidth - containerWidth;
+      const currentTranslate = currentIndex * totalCardSpace;
+
+      // Move to next card if we haven't reached the end
+      if (currentTranslate < maxTranslate) {
+        currentIndex++;
+        updateCarousel();
+      }
+    }
+
+    function goPrev() {
+      // Move to previous card (one card at a time)
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCarousel();
+      }
+    }
+
+    function handleDragStart(clientX) {
+      isDragging = true;
+      dragStartX = clientX;
+      dragStartTime = Date.now();
+      track.classList.add('dragging');
+    }
+
+    function handleDragMove(clientX) {
+      if (!isDragging) return;
+      const deltaX = clientX - dragStartX;
+      currentTranslateX = deltaX;
+      updateCarousel(false);
+    }
+
+    function handleDragEnd(clientX) {
+      if (!isDragging) return;
+
+      isDragging = false;
+      track.classList.remove('dragging');
+
+      const deltaX = clientX - dragStartX;
+      const deltaTime = Date.now() - dragStartTime;
+      const velocity = Math.abs(deltaX) / deltaTime;
+
+      const shouldNavigate = Math.abs(deltaX) > dragThreshold || velocity > velocityThreshold;
+
+      if (shouldNavigate) {
+        if (deltaX > 0) {
+          // Swiped right - go to previous card
+          goPrev();
+        } else {
+          // Swiped left - go to next card
+          goNext();
+        }
+      } else {
+        // Snap back to current position
+        currentTranslateX = 0;
+        updateCarousel();
+      }
+
+      currentTranslateX = 0;
+    }
+
+    // Mouse events
+    track.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      handleDragStart(e.clientX);
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (isDragging) {
+        e.preventDefault();
+        handleDragMove(e.clientX);
+      }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isDragging) {
+        handleDragEnd(e.clientX);
+      }
+    });
+
+    // Touch events
+    track.addEventListener('touchstart', function(e) {
+      handleDragStart(e.touches[0].clientX);
+    });
+
+    track.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      handleDragMove(e.touches[0].clientX);
+    });
+
+    track.addEventListener('touchend', function(e) {
+      const touch = e.changedTouches[0];
+      handleDragEnd(touch.clientX);
+    });
+
+    // Button events - ONE CARD AT A TIME
+    nextBtn.addEventListener('click', goNext);
+    prevBtn.addEventListener('click', goPrev);
+
+    // Prevent default drag behavior on images
+    track.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+    });
+
+    // Initialize on page load
+    setTimeout(updateCarousel, 100);
+
+    // Reset to first card on resize
+    window.addEventListener('resize', function() {
+      currentIndex = 0;
+      currentTranslateX = 0;
+      setTimeout(updateCarousel, 100);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Shop by Print",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Padding Bottom",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Padding Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Decorative Line Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "line_icon",
+      "label": "Curvy Line Icon (SVG/PNG)",
+      "info": "Upload your custom curvy line icon to appear below the heading"
+    },
+    {
+      "type": "range",
+      "id": "line_icon_width",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Line Icon Width",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "line_icon_height",
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Line Icon Height",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "line_icon_overlap",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Overlap with Heading",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "line_icon_spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Spacing Below Icon",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Section Design"
+    },
+    {
+      "type": "range",
+      "id": "top_border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Border Radius",
+      "default": 40,
+      "info": "Rounded corners on top of section"
+    },
+    {
+      "type": "range",
+      "id": "section_overlap",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "label": "Section Overlap",
+      "default": 60,
+      "info": "How much this section extends into the next section below"
+    },
+    {
+      "type": "header",
+      "content": "Section Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Optional background image. If set, it will overlay the background color."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop by Print"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Discover a world where every little outfit is made with love, care, and purpose.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Decorative Icon - Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "floating_icon",
+      "label": "Decorative Icon (PNG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "icon_size_desktop",
+      "min": 30,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Icon Size",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Top Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon_right_desktop",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Right Position",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Decorative Icon - Mobile"
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Icon Size",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "icon_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Top Position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "icon_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Right Position",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Text Sizes"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Font Size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Title Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Description Font Size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#5D4037"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Card Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_color",
+      "label": "Navigation Button Color",
+      "default": "#8B4513"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "print_item",
+      "name": "Print Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Print Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Print Title",
+          "default": "Dolphin Print"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Print Description",
+          "default": "Packed with care, Deliver with love!"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)",
+          "info": "Link to collection or page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Print",
+      "blocks": [
+        {
+          "type": "print_item",
+          "settings": {
+            "title": "Dolphin Print",
+            "description": "Packed with care, Deliver with love!"
+          }
+        },
+        {
+          "type": "print_item",
+          "settings": {
+            "title": "Dolphin Print",
+            "description": "Packed with care, Deliver with love!"
+          }
+        },
+        {
+          "type": "print_item",
+          "settings": {
+            "title": "Dolphin Print",
+            "description": "Packed with care, Deliver with love!"
+          }
+        },
+        {
+          "type": "print_item",
+          "settings": {
+            "title": "Dolphin Print",
+            "description": "Packed with care, Deliver with love!"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

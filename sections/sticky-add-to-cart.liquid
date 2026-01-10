@@ -1,0 +1,446 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --font-heading-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+
+/* STICKY BOTTOM BAR */
+.sticky-atc-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  border-top: 2px solid #E5E7EB;
+}
+
+.sticky-atc-bar.visible {
+  transform: translateY(0);
+}
+
+.sticky-atc-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* PRODUCT INFO */
+.sticky-product-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.sticky-product-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  background-color: #F9FAFB;
+}
+
+.sticky-product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.sticky-product-title {
+  font-family: var(--font-heading-family);
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.2;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-product-price {
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+/* Override main product price styles for sticky bar */
+.sticky-product-price .price-item--sale,
+.sticky-product-price .price-item--regular {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.sticky-product-price .price__sale .price-item--sale {
+  color: #DC2626;
+  font-size: 13px !important;
+}
+
+.sticky-product-price .price__sale .price-item--regular {
+  color: #6B7280;
+  font-size: 11px !important;
+}
+
+/* ADD TO CART BUTTON */
+.sticky-atc-button {
+  font-family: var(--font-body-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background-color: #D2691E;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 32px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  min-width: 140px;
+  min-height: 44px;
+}
+
+.sticky-atc-button:hover:not(:disabled) {
+  background-color: #B8621B;
+}
+
+.sticky-atc-button:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.sticky-atc-button.loading {
+  color: transparent;
+}
+
+.sticky-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top: 2px solid #FFFFFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+
+.sticky-atc-button.loading .sticky-spinner {
+  display: block;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .sticky-atc-container {
+    padding: 10px 16px;
+    gap: 12px;
+  }
+  
+  .sticky-product-image {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .sticky-product-title {
+    font-size: 13px;
+    max-width: 200px;
+  }
+  
+  .sticky-product-price {
+    font-size: 12px;
+  }
+  
+  .sticky-atc-button {
+    font-size: 14px;
+    padding: 10px 24px;
+    min-width: 120px;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-atc-container {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  
+  .sticky-product-title {
+    font-size: 12px;
+    max-width: 150px;
+  }
+  
+  .sticky-atc-button {
+    padding: 10px 20px;
+    min-width: 100px;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+}
+</style>
+
+<div class="sticky-atc-bar" id="stickyAtcBar-{{ section.id }}">
+  <div class="sticky-atc-container">
+    <!-- Product Info -->
+    <div class="sticky-product-info">
+      {%- if product.featured_media -%}
+        <img 
+          src="{{ product.featured_media | image_url: width: 100 }}" 
+          alt="{{ product.featured_media.alt | escape }}"
+          class="sticky-product-image"
+          loading="lazy"
+        >
+      {%- endif -%}
+      <div class="sticky-product-details">
+        <div class="sticky-product-title">{{ product.title | escape }}</div>
+        <div class="sticky-product-price" id="stickyPrice-{{ section.id }}">
+          {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+            <span class="sticky-sale-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+            <s class="sticky-regular-price" style="margin-left: 6px; font-size: 11px;">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+          {%- else -%}
+            {{ product.selected_or_first_available_variant.price | money }}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <!-- Add to Cart Button -->
+    <button 
+      type="button" 
+      class="sticky-atc-button" 
+      id="stickyAtcButton-{{ section.id }}"
+      data-product-id="{{ product.id }}"
+      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    >
+      <span class="sticky-atc-text">
+        {%- if product.selected_or_first_available_variant.available -%}
+          Add to Cart
+        {%- else -%}
+          Sold Out
+        {%- endif -%}
+      </span>
+      <div class="sticky-spinner"></div>
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const sectionId = '{{ section.id }}';
+  const stickyBar = document.getElementById(`stickyAtcBar-${sectionId}`);
+  const stickyButton = document.getElementById(`stickyAtcButton-${sectionId}`);
+  const stickyPrice = document.getElementById(`stickyPrice-${sectionId}`);
+  const productData = {{ product | json }};
+  
+  // Store current variant
+  let currentVariantId = {{ product.selected_or_first_available_variant.id }};
+  
+  // Shopify money format from theme
+  const moneyFormat = '{{ shop.money_format }}';
+
+  // ===== INTERSECTION OBSERVER - Show/Hide Sticky Bar =====
+  function initStickyBarObserver() {
+    const mainAddToCartButton = document.querySelector('.product-form__cart-submit');
+    
+    if (!mainAddToCartButton || !stickyBar) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Main button is visible - hide sticky bar
+          stickyBar.classList.remove('visible');
+        } else {
+          // Main button is out of view - show sticky bar
+          stickyBar.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0,
+      rootMargin: '0px'
+    });
+
+    observer.observe(mainAddToCartButton);
+  }
+
+  // ===== LISTEN TO MAIN SECTION VARIANT CHANGES =====
+  function listenToMainSectionChanges() {
+    // Listen to main section variant changes
+    const mainVariantSelects = document.querySelector('variant-selects');
+    if (mainVariantSelects) {
+      mainVariantSelects.addEventListener('change', function() {
+        setTimeout(() => {
+          updateFromMainSection();
+        }, 200);
+      });
+    }
+
+    // Also listen to main form hidden input changes
+    const mainVariantInput = document.querySelector('input[name="id"]');
+    if (mainVariantInput) {
+      const observer = new MutationObserver(function() {
+        updateFromMainSection();
+      });
+      observer.observe(mainVariantInput, { attributes: true, attributeFilter: ['value'] });
+    }
+  }
+
+  function updateFromMainSection() {
+    const mainVariantInput = document.querySelector('input[name="id"]');
+    if (mainVariantInput) {
+      const variantId = parseInt(mainVariantInput.value);
+      const variant = productData.variants.find(v => v.id === variantId);
+      
+      if (variant) {
+        currentVariantId = variant.id;
+        stickyButton.dataset.variantId = variant.id;
+        updateButtonState(variant);
+        
+        // Copy price directly from main section
+        copyPriceFromMainSection();
+      }
+    }
+  }
+
+  // Copy the price HTML directly from the main product section
+  function copyPriceFromMainSection() {
+    const mainPriceContainer = document.querySelector('.price__container');
+    if (mainPriceContainer && stickyPrice) {
+      // Clone the price HTML from main section
+      const priceHTML = mainPriceContainer.innerHTML;
+      stickyPrice.innerHTML = priceHTML;
+    }
+  }
+
+  // Update button text and state
+  function updateButtonState(variant) {
+    const buttonText = stickyButton.querySelector('.sticky-atc-text');
+    
+    if (variant.available) {
+      stickyButton.disabled = false;
+      buttonText.textContent = 'Add to Cart';
+    } else {
+      stickyButton.disabled = true;
+      buttonText.textContent = 'Sold Out';
+    }
+  }
+
+  // ===== ADD TO CART FUNCTIONALITY =====
+  function initAddToCart() {
+    if (!stickyButton) return;
+
+    stickyButton.addEventListener('click', function() {
+      if (this.disabled) return;
+
+      const variantId = this.dataset.variantId || currentVariantId;
+      
+      // Show loading state
+      this.classList.add('loading');
+      this.disabled = true;
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append('id', variantId);
+      formData.append('quantity', 1);
+
+      // Add to cart via Shopify API
+      fetch('/cart/add', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          // Redirect to cart
+          window.location.href = '/cart';
+        } else {
+          throw new Error('Failed to add to cart');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to add to cart. Please try again.');
+        
+        // Reset button state
+        this.classList.remove('loading');
+        this.disabled = false;
+      });
+    });
+  }
+
+  // ===== INITIALIZE =====
+  document.addEventListener('DOMContentLoaded', function() {
+    initStickyBarObserver();
+    initAddToCart();
+    listenToMainSectionChanges();
+    
+    // Initial price copy
+    copyPriceFromMainSection();
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky Add to Cart",
+  "tag": "section",
+  "class": "section-sticky-atc",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "This section automatically appears when the main Add to Cart button scrolls out of view. It syncs with the main product form."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#D2691E"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky Add to Cart"
+    }
+  ]
+}
+{% endschema %}

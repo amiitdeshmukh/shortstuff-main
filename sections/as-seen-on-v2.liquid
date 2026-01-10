@@ -1,0 +1,973 @@
+<style>
+  .news-section-independent {
+    background-color: {{ section.settings.background_color }};
+    padding: {{ section.settings.section_padding_top }}px 0 {{ section.settings.section_padding_bottom }}px 0;
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: {{ section.settings.section_border_radius_top }}px;
+    border-top-right-radius: {{ section.settings.section_border_radius_top }}px;
+    border-bottom-left-radius: {{ section.settings.section_border_radius_bottom }}px;
+    border-bottom-right-radius: {{ section.settings.section_border_radius_bottom }}px;
+  }
+
+  .news-section-independent .news-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Static Decoration - No Floating */
+  .news-section-independent .static-decoration {
+    position: absolute;
+    top: {{ section.settings.decoration_top }}%;
+    right: {{ section.settings.decoration_right }}%;
+    width: {{ section.settings.decoration_size }}px;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  /* Section Header */
+  .news-section-independent .news-header {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .news-section-independent .news-title {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: bold;
+    color: {{ section.settings.title_color }};
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+  }
+
+  /* Curvy Line Icon */
+  .news-section-independent .news-curvy-line-icon {
+    display: block;
+    position: absolute;
+    left: {{ section.settings.curvy_line_x_position }}%;
+    transform: translateX(-50%);
+    top: {{ section.settings.curvy_line_y_position }}px;
+    width: {{ section.settings.curvy_line_size }}px;
+    height: auto;
+    z-index: 3;
+  }
+
+  .news-section-independent .news-description {
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.description_color }};
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+  }
+
+  /* Navigation */
+  .news-section-independent .news-navigation-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .news-section-independent .news-nav-btn {
+    width: 50px;
+    height: 50px;
+    border: 2px solid {{ section.settings.nav_color }};
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    color: {{ section.settings.nav_color }};
+  }
+
+  .news-section-independent .news-nav-btn:hover {
+    background: {{ section.settings.nav_color }};
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Articles Container */
+  .news-section-independent .news-articles-container {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1rem 0 2rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    justify-content: center;
+  }
+
+  .news-section-independent .news-articles-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Center when few articles */
+  .news-section-independent .news-articles-container[data-centered="true"] {
+    justify-content: center;
+  }
+
+  .news-section-independent .news-article-card {
+    background: white;
+    border-radius: {{ section.settings.card_radius }}px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid {{ section.settings.border_color }};
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    flex: 0 0 320px;
+    min-width: 320px;
+    scroll-snap-align: start;
+    position: relative;
+  }
+
+  .news-section-independent .news-article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+    color: inherit;
+    z-index: 10;
+  }
+
+  .news-section-independent .news-article-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .news-section-independent .news-article-card:hover .news-article-image {
+    transform: scale(1.05);
+  }
+
+  .news-section-independent .news-article-content {
+    padding: 1.25rem;
+  }
+
+  .news-section-independent .news-article-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: {{ section.settings.date_size }}px;
+    color: {{ section.settings.date_color }};
+    margin-bottom: 0.75rem;
+  }
+
+  .news-section-independent .news-date-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+  }
+
+  .news-section-independent .news-article-title {
+    font-size: {{ section.settings.article_title_size }}px;
+    font-weight: 600;
+    color: {{ section.settings.article_title_color }};
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-section-independent .news-article-excerpt {
+    font-size: {{ section.settings.excerpt_size }}px;
+    color: {{ section.settings.excerpt_color }};
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-section-independent .news-read-more {
+    font-size: {{ section.settings.read_more_size }}px;
+    color: {{ section.settings.read_more_color }};
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .news-section-independent .news-read-more:hover {
+    color: {{ section.settings.read_more_hover_color }};
+  }
+
+  /* View All Button */
+  .news-section-independent .news-view-all-section {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .news-section-independent .news-view-all-button {
+    background-color: {{ section.settings.btn_bg_color }};
+    color: {{ section.settings.btn_text_color }};
+    padding: 1rem 2.5rem;
+    border-radius: {{ section.settings.btn_radius }}px;
+    font-size: {{ section.settings.btn_text_size }}px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .news-section-independent .news-view-all-button:hover {
+    background-color: {{ section.settings.btn_hover_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: {{ section.settings.btn_text_color }};
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 768px) {
+    .news-section-independent {
+      padding: {{ section.settings.section_padding_top_mobile }}px 0 {{ section.settings.section_padding_bottom_mobile }}px 0;
+    }
+
+    .news-section-independent .news-container {
+      padding: 0 1rem;
+    }
+
+    .news-section-independent .news-title {
+      font-size: {{ section.settings.title_size | times: 0.8 }}px;
+    }
+
+    .news-section-independent .news-curvy-line-icon {
+      width: {{ section.settings.curvy_line_size_mobile }}px;
+      top: {{ section.settings.curvy_line_y_position_mobile }}px;
+      left: {{ section.settings.curvy_line_x_position_mobile }}%;
+    }
+
+    .news-section-independent .news-articles-container {
+      gap: 1.5rem;
+      padding: 1rem 0 2rem 0;
+      justify-content: flex-start;
+    }
+
+    .news-section-independent .news-articles-container[data-centered="true"] {
+      justify-content: center;
+    }
+
+    .news-section-independent .news-article-card {
+      flex: 0 0 280px;
+      min-width: 280px;
+    }
+
+    .news-section-independent .news-nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+
+    .news-section-independent .static-decoration {
+      width: {{ section.settings.decoration_size_mobile }}px;
+      top: {{ section.settings.decoration_top_mobile }}%;
+      right: {{ section.settings.decoration_right_mobile }}%;
+    }
+
+    .news-section-independent .news-article-content {
+      padding: 1rem;
+    }
+  }
+
+  /* Very small screens */
+  @media screen and (max-width: 480px) {
+    .news-section-independent .news-container {
+      padding: 0 0.5rem;
+    }
+
+    .news-section-independent .news-articles-container {
+      gap: 1rem;
+      padding: 1rem 0.5rem 2rem 0.5rem;
+    }
+
+    .news-section-independent .news-article-card {
+      flex: 0 0 260px;
+      min-width: 260px;
+    }
+  }
+</style>
+
+<section class="news-section-independent">
+  <!-- Static Decoration -->
+  {% if section.settings.decoration_image != blank %}
+    <img
+      src="{{ section.settings.decoration_image | image_url: width: 200 }}"
+      alt="Decoration"
+      class="static-decoration"
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="news-container">
+    <!-- Section Header -->
+    <div class="news-header">
+      {% if section.settings.title != blank %}
+        <h2 class="news-title">{{ section.settings.title }}</h2>
+      {% endif %}
+
+      <!-- Curvy Line Icon -->
+      {% if section.settings.curvy_line_icon != blank %}
+        <img
+          src="{{ section.settings.curvy_line_icon | image_url: width: 400 }}"
+          alt="Decorative curvy line"
+          class="news-curvy-line-icon"
+          loading="lazy"
+        >
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="news-description">{{ section.settings.description }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Navigation -->
+    {% if section.settings.show_nav %}
+      <div class="news-navigation-wrapper">
+        <button class="news-nav-btn" onclick="scrollNewsArticles(-1)">‹</button>
+        <button class="news-nav-btn" onclick="scrollNewsArticles(1)">›</button>
+      </div>
+    {% endif %}
+
+    <!-- Articles -->
+    <div class="news-articles-container" id="newsArticlesContainer" data-centered="true">
+      {% assign selected_blog = blogs[section.settings.blog] %}
+      {% assign article_count = section.settings.article_count | default: 4 %}
+
+      {% if selected_blog != blank and selected_blog.articles.size > 0 %}
+        {% for article in selected_blog.articles limit: article_count %}
+          <a href="{{ article.url }}" class="news-article-card">
+            {% if article.image != blank %}
+              <img
+                src="{{ article.image | image_url: width: 400 }}"
+                alt="{{ article.image.alt | default: article.title }}"
+                class="news-article-image"
+                loading="lazy"
+              >
+            {% else %}
+              <div
+                class="news-article-image"
+                style="background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;"
+              >
+                No Image
+              </div>
+            {% endif %}
+
+            <div class="news-article-content">
+              <div class="news-article-date">
+                <svg class="news-date-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                </svg>
+                {{ article.published_at | date: '%b %d, %Y' }}
+              </div>
+
+              <h3 class="news-article-title">{{ article.title }}</h3>
+
+              {% if article.excerpt != blank %}
+                <p class="news-article-excerpt">{{ article.excerpt | strip_html | truncate: 140 }}</p>
+              {% else %}
+                <p class="news-article-excerpt">{{ article.content | strip_html | truncate: 140 }}</p>
+              {% endif %}
+
+              <span class="news-read-more">{{ section.settings.read_more_text | default: 'Read More' }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        <div style="width: 100%; text-align: center; padding: 2rem; color: #666;">
+          {% if section.settings.blog == blank %}
+            <p><strong>Please select a blog in the section settings to display articles.</strong></p>
+            <p style="font-size: 14px; margin-top: 10px;">Go to the theme customizer and choose a blog from the dropdown.</p>
+          {% else %}
+            <p>No articles found in the selected blog.</p>
+            <p style="font-size: 14px; margin-top: 10px;">Please add some blog posts to display them here.</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- View All Button -->
+    {% if section.settings.show_view_all and selected_blog != blank %}
+      <div class="news-view-all-section">
+        <a href="{{ selected_blog.url }}" class="news-view-all-button">
+          {{ section.settings.view_all_text | default: 'View All Articles' }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  let newsScrollPosition = 0;
+
+  function scrollNewsArticles(direction) {
+    const container = document.getElementById('newsArticlesContainer');
+    if (!container) return;
+    
+    const cards = container.querySelectorAll('.news-article-card');
+    if (cards.length === 0) return;
+
+    const cardWidth = 320;
+    const gap = 32;
+    const scrollDistance = cardWidth + gap;
+
+    newsScrollPosition += (scrollDistance * direction);
+
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
+    if (newsScrollPosition < 0) {
+      newsScrollPosition = 0;
+    } else if (newsScrollPosition > maxScroll) {
+      newsScrollPosition = maxScroll;
+    }
+
+    container.scrollTo({
+      left: newsScrollPosition,
+      behavior: 'smooth'
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('newsArticlesContainer');
+    if (container) {
+      container.addEventListener('scroll', function() {
+        newsScrollPosition = container.scrollLeft;
+      });
+
+      // Check if we should center articles
+      const articles = container.querySelectorAll('.news-article-card');
+      const isMobile = window.innerWidth <= 768;
+
+      // Only center on mobile if 1 article, on desktop if 3 or less
+      if ((!isMobile && articles.length <= 3) || (isMobile && articles.length <= 1)) {
+        container.setAttribute('data-centered', 'true');
+      } else {
+        container.setAttribute('data-centered', 'false');
+      }
+    }
+  });
+
+  // Re-check centering on window resize
+  window.addEventListener('resize', function() {
+    const container = document.getElementById('newsArticlesContainer');
+    if (container) {
+      const articles = container.querySelectorAll('.news-article-card');
+      const isMobile = window.innerWidth <= 768;
+
+      if ((!isMobile && articles.length <= 3) || (isMobile && articles.length <= 1)) {
+        container.setAttribute('data-centered', 'true');
+      } else {
+        container.setAttribute('data-centered', 'false');
+      }
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "News Articles V2",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "⚠️ Important: Create a Blog First"
+    },
+    {
+      "type": "paragraph",
+      "content": "If you don't see any blogs in the dropdown below, go to Online Store > Blog posts in your Shopify admin and create a blog first."
+    },
+    {
+      "type": "header",
+      "content": "Blog Settings"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Blog",
+      "info": "Choose which blog to display articles from. Create a blog first if none appear."
+    },
+    {
+      "type": "range",
+      "id": "article_count",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Number of Articles",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "label": "Read More Text",
+      "default": "Read More"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Top Padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Bottom Padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Section Border Radius"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius_top",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Top Border Radius",
+      "default": 0,
+      "info": "Rounds the top corners of the section"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom Border Radius",
+      "default": 0,
+      "info": "Rounds the bottom corners of the section"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Latest News"
+    },
+    {
+      "type": "header",
+      "content": "Curvy Line Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "curvy_line_icon",
+      "label": "Upload Curvy Line Icon (SVG recommended)"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_size",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_y_position",
+      "min": -20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Y Position (from title)",
+      "default": 45,
+      "info": "Negative values will overlap the title"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_x_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop X Position (left to right)",
+      "default": 50,
+      "info": "50% = center, 0% = left, 100% = right"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_size_mobile",
+      "min": 40,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_y_position_mobile",
+      "min": -15,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Y Position (from title)",
+      "default": 35,
+      "info": "Negative values will overlap the title"
+    },
+    {
+      "type": "range",
+      "id": "curvy_line_x_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile X Position (left to right)",
+      "default": 50,
+      "info": "50% = center, 0% = left, 100% = right"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigation Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "header",
+      "content": "View All Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Button Text",
+      "default": "View All Articles"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title Size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "article_title_size",
+      "min": 16,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Article Title Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "excerpt_size",
+      "min": 13,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Excerpt Size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "date_size",
+      "min": 12,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Date Size",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "read_more_size",
+      "min": 13,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Read More Size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "btn_text_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Text Size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "article_title_color",
+      "label": "Article Title Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "excerpt_color",
+      "label": "Excerpt Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "date_color",
+      "label": "Date Color",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "read_more_color",
+      "label": "Read More Color",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "read_more_hover_color",
+      "label": "Read More Hover Color",
+      "default": "#A0522D"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background",
+      "default": "#8B4513"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_color",
+      "label": "Button Hover Color",
+      "default": "#A0522D"
+    },
+    {
+      "type": "header",
+      "content": "Card Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card Border Color",
+      "default": "#F4A460"
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Border Radius",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Static Decoration Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "decoration_image",
+      "label": "Decoration Icon"
+    },
+    {
+      "type": "range",
+      "id": "decoration_size",
+      "min": 30,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "decoration_size_mobile",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Size",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "decoration_top",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop Top Position",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "decoration_right",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Desktop Right Position",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "decoration_top_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Top Position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "decoration_right_mobile",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile Right Position",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "News Articles V2",
+      "settings": {
+        "title": "Latest News",
+        "article_count": 4,
+        "show_nav": true,
+        "show_view_all": true
+      }
+    }
+  ]
+}
+{% endschema %}
