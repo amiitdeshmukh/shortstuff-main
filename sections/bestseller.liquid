@@ -375,7 +375,7 @@
           <div class="bs-menu">
             {% for block in section.blocks %}
               <button type="button"
-                      class="bs-menu-item {% if forloop.first %}active{% endif %}"
+                      class="bs-menu-item {% if block.settings.category_name == 'Zippies' %}active{% endif %}"
                       data-category-filter="{{ block.settings.category_filter | default: block.settings.category_name | downcase }}"
                       {{ block.shopify_attributes }}>
                 {{ block.settings.category_name }}
@@ -644,6 +644,37 @@
 
     var allCards = track.querySelectorAll('.bs-card');
 
+    // Function to apply filter
+    function applyFilter(filterKeyword) {
+      allCards.forEach(function(card) {
+        var productTitle = card.getAttribute('data-product-title');
+        if (productTitle && productTitle.includes(filterKeyword)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Reset carousel position to start
+      prevTranslate = 0;
+      currentTranslate = 0;
+      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      setSliderPosition();
+      updateButtons();
+      
+      setTimeout(function() {
+        track.style.transition = '';
+      }, 500);
+    }
+
+    // Apply default filter on load (Zippies)
+    var activeMenuItem = document.querySelector('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item.active');
+    if (activeMenuItem) {
+      var defaultFilter = activeMenuItem.getAttribute('data-category-filter');
+      applyFilter(defaultFilter);
+    }
+
+    // Add click handlers to menu items
     menuItems.forEach(function(menuItem) {
       menuItem.addEventListener('click', function(e) {
         e.preventDefault();
@@ -654,29 +685,9 @@
         });
         this.classList.add('active');
 
-        // Get filter keyword
+        // Get filter keyword and apply filter
         var filterKeyword = this.getAttribute('data-category-filter');
-        
-        // Filter products - show/hide based on keyword match
-        allCards.forEach(function(card) {
-          var productTitle = card.getAttribute('data-product-title');
-          if (productTitle && productTitle.includes(filterKeyword)) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        // Reset carousel position to start
-        prevTranslate = 0;
-        currentTranslate = 0;
-        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        setSliderPosition();
-        updateButtons();
-        
-        setTimeout(function() {
-          track.style.transition = '';
-        }, 500);
+        applyFilter(filterKeyword);
       });
     });
   }
