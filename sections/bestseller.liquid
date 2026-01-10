@@ -375,7 +375,7 @@
           <div class="bs-menu">
             {% for block in section.blocks %}
               <button type="button"
-                      class="bs-menu-item {% if block.settings.category_name == 'Zippies' %}active{% endif %}"
+                      class="bs-menu-item {% if forloop.first %}active{% endif %}"
                       data-category-filter="{{ block.settings.category_filter | default: block.settings.category_name | downcase }}"
                       {{ block.shopify_attributes }}>
                 {{ block.settings.category_name }}
@@ -639,65 +639,11 @@
   function initCategoryFilter() {
     var menuItems = document.querySelectorAll('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item');
     var track = document.getElementById(trackId);
-    var prevBtn = document.querySelector('.bs-prev-' + sectionId);
-    var nextBtn = document.querySelector('.bs-next-' + sectionId);
     
     if (!track || menuItems.length === 0) return;
 
     var allCards = track.querySelectorAll('.bs-card');
-    var cards = allCards;
 
-    // Function to get card width
-    function getCardWidthFilter() {
-      var visibleCards = track.querySelectorAll('.bs-card[style*="display: flex"], .bs-card:not([style*="display"])');
-      if (visibleCards.length === 0) return 0;
-      var cardStyle = window.getComputedStyle(visibleCards[0]);
-      var gap = parseInt(window.getComputedStyle(track).gap) || 20;
-      return parseInt(cardStyle.width) + gap;
-    }
-
-    // Function to get max translate
-    function getMaxTranslateFilter() {
-      var wrapper = track.parentElement;
-      var visibleCards = track.querySelectorAll('.bs-card[style*="display: flex"], .bs-card:not([style*="display"])');
-      var trackWidth = visibleCards.length * getCardWidthFilter();
-      return Math.min(0, wrapper.offsetWidth - trackWidth + getCardWidthFilter());
-    }
-
-    // Function to update buttons
-    function updateButtonsFilter() {
-      if (!prevBtn || !nextBtn) return;
-      var maxTranslate = getMaxTranslateFilter();
-      prevBtn.disabled = currentTranslate >= 0;
-      nextBtn.disabled = currentTranslate <= maxTranslate;
-    }
-
-    // Function to apply filter
-    function applyFilter(filterKeyword) {
-      allCards.forEach(function(card) {
-        var productTitle = card.getAttribute('data-product-title');
-        if (productTitle && productTitle.includes(filterKeyword)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      // Reset carousel position to start
-      prevTranslate = 0;
-      currentTranslate = 0;
-      track.style.transform = 'translateX(0px)';
-      updateButtonsFilter();
-    }
-
-    // Apply default filter on load (Zippies)
-    var activeMenuItem = document.querySelector('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item.active');
-    if (activeMenuItem) {
-      var defaultFilter = activeMenuItem.getAttribute('data-category-filter');
-      applyFilter(defaultFilter);
-    }
-
-    // Add click handlers to menu items
     menuItems.forEach(function(menuItem) {
       menuItem.addEventListener('click', function(e) {
         e.preventDefault();
@@ -708,9 +654,29 @@
         });
         this.classList.add('active');
 
-        // Get filter keyword and apply filter
+        // Get filter keyword
         var filterKeyword = this.getAttribute('data-category-filter');
-        applyFilter(filterKeyword);
+        
+        // Filter products - show/hide based on keyword match
+        allCards.forEach(function(card) {
+          var productTitle = card.getAttribute('data-product-title');
+          if (productTitle && productTitle.includes(filterKeyword)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Reset carousel position to start
+        prevTranslate = 0;
+        currentTranslate = 0;
+        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        setSliderPosition();
+        updateButtons();
+        
+        setTimeout(function() {
+          track.style.transition = '';
+        }, 500);
       });
     });
   }
