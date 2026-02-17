@@ -370,11 +370,10 @@
               <div class="new-arrivals-info">
                 <h3 class="new-arrivals-product-title">{{ product.title | escape }}</h3>
                 <div class="new-arrivals-product-price">
-                  {% assign variant = product.selected_or_first_available_variant %}
-                  {% if variant.compare_at_price > variant.price %}
-                    <span class="new-arrivals-compare-price">{{ variant.compare_at_price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                    <span class="new-arrivals-compare-price">{{ product.compare_at_price | money }}</span>
                   {% endif %}
-                  <span>{{ variant.price | money }}</span>
+                  <span>{{ product.price | money }}</span>
                 </div>
               </div>
             </a>
