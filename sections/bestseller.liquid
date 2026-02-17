@@ -161,6 +161,15 @@
     transition: none;
   }
 
+  /* Collection Groups */
+  section.bestsellers-section-unique .bs-collection-group {
+    display: contents;
+  }
+
+  section.bestsellers-section-unique .bs-collection-group[style*="display: none"] {
+    display: none !important;
+  }
+
   /* Product Cards */
   section.bestsellers-section-unique .bs-card {
     flex: 0 0 {{ section.settings.card_width }}px;
@@ -376,7 +385,8 @@
             {% for block in section.blocks %}
               <button type="button"
                       class="bs-menu-item {% if forloop.first %}active{% endif %}"
-                      data-category-filter="{{ block.settings.category_filter | default: block.settings.category_name | downcase }}"
+                      data-collection-handle="{{ block.settings.collection.handle }}"
+                      data-block-index="{{ forloop.index0 }}"
                       {{ block.shopify_attributes }}>
                 {{ block.settings.category_name }}
               </button>
@@ -404,43 +414,90 @@
     <!-- Products -->
     <div class="bs-wrapper">
       <div class="bs-track" id="bsTrack{{ section.id }}">
-        {% assign collection = collections[section.settings.collection] %}
-        {% if collection != blank %}
-          {% for product in collection.products limit: section.settings.products_to_show %}
-            <a href="{{ product.url }}" class="bs-card">
-              <div class="bs-img-wrapper">
-                {% if product.featured_image != blank %}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 500 }}"
-                    alt="{{ product.featured_image.alt | default: product.title }}"
-                    class="bs-img"
-                    width="500"
-                    height="500"
-                    loading="lazy"
-                  >
-                {% else %}
-                  <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
-                    No Image
-                  </div>
-                {% endif %}
-              </div>
-              <div class="bs-info">
-                <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
-                <div class="bs-price">
-                  {% if product.compare_at_price > product.price %}
-                    <span class="bs-price-sale">{{ product.price | money }}</span>
-                    <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
-                  {% else %}
-                    {{ product.price | money }}
-                  {% endif %}
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            {% assign current_collection = collections[block.settings.collection] %}
+            <div class="bs-collection-group" 
+                 data-block-index="{{ forloop.index0 }}"
+                 style="display: {% if forloop.first %}contents{% else %}none{% endif %};">
+              {% if current_collection != blank and current_collection.products.size > 0 %}
+                {% for product in current_collection.products limit: section.settings.products_to_show %}
+                  <a href="{{ product.url }}" class="bs-card">
+                    <div class="bs-img-wrapper">
+                      {% if product.featured_image != blank %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 500 }}"
+                          alt="{{ product.featured_image.alt | default: product.title }}"
+                          class="bs-img"
+                          width="500"
+                          height="500"
+                          loading="lazy"
+                        >
+                      {% else %}
+                        <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
+                          No Image
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="bs-info">
+                      <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
+                      <div class="bs-price">
+                        {% if product.compare_at_price > product.price %}
+                          <span class="bs-price-sale">{{ product.price | money }}</span>
+                          <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
+                        {% else %}
+                          {{ product.price | money }}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </a>
+                {% endfor %}
+              {% else %}
+                <div style="padding: 40px; text-align: center; color: #999; width: 100%;">
+                  No products in this collection
                 </div>
-              </div>
-            </a>
+              {% endif %}
+            </div>
           {% endfor %}
         {% else %}
-          <div style="padding: 40px; text-align: center; color: #999;">
-            Please select a collection in theme settings
-          </div>
+          {% assign collection = collections[section.settings.collection] %}
+          {% if collection != blank %}
+            {% for product in collection.products limit: section.settings.products_to_show %}
+              <a href="{{ product.url }}" class="bs-card">
+                <div class="bs-img-wrapper">
+                  {% if product.featured_image != blank %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 500 }}"
+                      alt="{{ product.featured_image.alt | default: product.title }}"
+                      class="bs-img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
+                      No Image
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="bs-info">
+                  <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
+                  <div class="bs-price">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="bs-price-sale">{{ product.price | money }}</span>
+                      <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      {{ product.price | money }}
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          {% else %}
+            <div style="padding: 40px; text-align: center; color: #999;">
+              Please select a collection in theme settings
+            </div>
+          {% endif %}
         {% endif %}
       </div>
     </div>
@@ -630,14 +687,61 @@
     }
   }
 
+  function initCategoryFilter() {
+    var section = document.querySelector('.bestsellers-section-unique[data-section-id="' + sectionId + '"]');
+    if (!section) return;
+
+    var menuItems = section.querySelectorAll('.bs-menu-item');
+    var collectionGroups = document.querySelectorAll('.bs-collection-group[data-block-index]');
+    
+    if (menuItems.length === 0 || collectionGroups.length === 0) return;
+
+    menuItems.forEach(function(menuItem) {
+      menuItem.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active state
+        menuItems.forEach(function(item) {
+          item.classList.remove('active');
+        });
+        this.classList.add('active');
+
+        // Get the block index
+        var blockIndex = this.getAttribute('data-block-index');
+        
+        // Hide all collection groups
+        collectionGroups.forEach(function(group) {
+          group.style.display = 'none';
+        });
+        
+        // Show the selected collection group
+        var activeGroup = document.querySelector('.bs-collection-group[data-block-index="' + blockIndex + '"]');
+        if (activeGroup) {
+          activeGroup.style.display = 'contents';
+        }
+        
+        // Reset carousel position
+        prevTranslate = 0;
+        currentTranslate = 0;
+        setSliderPosition();
+        updateButtons();
+        
+        // Reinitialize carousel for new products
+        initBestsellers();
+      });
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initGlobalListeners();
       initBestsellers();
+      initCategoryFilter();
     });
   } else {
     initGlobalListeners();
     initBestsellers();
+    initCategoryFilter();
   }
 })();
 </script>
@@ -1174,10 +1278,10 @@
           "default": "Pyjamas"
         },
         {
-          "type": "text",
-          "id": "category_filter",
-          "label": "Filter Keyword",
-          "info": "Keyword to match in product titles (e.g., 'pj', 'zippy', 'onezie'). Leave blank to use category name."
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Select the collection to display for this category"
         }
       ]
     }
