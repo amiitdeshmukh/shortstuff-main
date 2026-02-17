@@ -417,6 +417,60 @@
 (function() {
   'use strict';
 
+  // Shopify money formatting function
+  function formatMoney(cents, format) {
+    if (typeof cents === 'string') {
+      cents = cents.replace('.', '');
+    }
+    var value = '';
+    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+    var formatString = format || '{{ shop.money_format }}';
+
+    function formatWithDelimiters(number, precision, thousands, decimal) {
+      precision = precision || 2;
+      thousands = thousands || ',';
+      decimal = decimal || '.';
+
+      if (isNaN(number) || number == null) {
+        return 0;
+      }
+
+      number = (number / 100.0).toFixed(precision);
+
+      var parts = number.split('.');
+      var dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+      var centsAmount = parts[1] ? (decimal + parts[1]) : '';
+
+      return dollarsAmount + centsAmount;
+    }
+
+    switch (formatString.match(placeholderRegex)[1]) {
+      case 'amount':
+        value = formatWithDelimiters(cents, 2);
+        break;
+      case 'amount_no_decimals':
+        value = formatWithDelimiters(cents, 0);
+        break;
+      case 'amount_with_comma_separator':
+        value = formatWithDelimiters(cents, 2, '.', ',');
+        break;
+      case 'amount_no_decimals_with_comma_separator':
+        value = formatWithDelimiters(cents, 0, '.', ',');
+        break;
+      case 'amount_with_space_separator':
+        value = formatWithDelimiters(cents, 2, ' ', ',');
+        break;
+      case 'amount_no_decimals_with_space_separator':
+        value = formatWithDelimiters(cents, 0, ' ', ',');
+        break;
+      case 'amount_with_apostrophe_separator':
+        value = formatWithDelimiters(cents, 2, "'", '.');
+        break;
+    }
+
+    return formatString.replace(placeholderRegex, value);
+  }
+
   var sectionId = '{{ section.id }}';
   var trackId = 'bsTrack' + sectionId;
   var currentTranslate = 0;
@@ -647,12 +701,14 @@
         var html = '';
         filteredProducts.forEach(function(product) {
           var imageUrl = product.images && product.images[0] ? product.images[0].src : '';
-          var price = product.variants && product.variants[0] ? product.variants[0].price : 0;
-          var comparePrice = product.variants && product.variants[0] ? product.variants[0].compare_at_price : 0;
+          var variant = product.variants && product.variants[0] ? product.variants[0] : null;
+          var price = variant ? variant.price : 0;
+          var comparePrice = variant ? variant.compare_at_price : 0;
           
-          // Format price (simple formatting)
-          var priceFormatted = '$' + (price / 100).toFixed(2);
-          var comparePriceFormatted = comparePrice ? '$' + (comparePrice / 100).toFixed(2) : '';
+          // Use Shopify's money format
+          var moneyFormat = '{{ shop.money_format }}';
+          var priceFormatted = formatMoney(price, moneyFormat);
+          var comparePriceFormatted = comparePrice ? formatMoney(comparePrice, moneyFormat) : '';
           
           html += '<a href="/products/' + product.handle + '" class="bs-card" data-product-title="' + product.title.toLowerCase() + '">';
           html += '  <div class="bs-img-wrapper">';
