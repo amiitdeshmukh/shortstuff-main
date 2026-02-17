@@ -370,11 +370,12 @@
               <div class="new-arrivals-info">
                 <h3 class="new-arrivals-product-title">{{ product.title | escape }}</h3>
                 <div class="new-arrivals-product-price">
-                  {% if product.compare_at_price > product.price %}
-                    <span class="new-arrivals-compare-price">{{ product.compare_at_price | money }}</span>
+                  {% if product.compare_at_price_min > product.price_min %}
+                    <span class="new-arrivals-compare-price">{{ product.compare_at_price_min | money }}</span>
                   {% endif %}
-                  <span>{{ product.price | money }}</span>
+                  <span>{{ product.price_min | money }}</span>
                 </div>
+                <!-- DEBUG: Raw price: {{ product.price }} | Price_min: {{ product.price_min }} -->
               </div>
             </a>
           {% endfor %}
