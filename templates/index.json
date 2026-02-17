@@ -395,15 +395,13 @@
         "category_MQYxbB": {
           "type": "category",
           "settings": {
-            "category_name": "Zippies",
-            "category_filter": "Zippy"
+            "category_name": "Zippies"
           }
         },
         "category_FcM4HU": {
           "type": "category",
           "settings": {
-            "category_name": "Pajamas",
-            "category_filter": "PJ"
+            "category_name": "Pajamas"
           }
         }
       },
@@ -418,7 +416,6 @@
         "section_padding_top_mobile": 40,
         "section_padding_bottom_mobile": 40,
         "background_color": "#fffcf6",
-        "collection": "all",
         "products_to_show": 9,
         "title": "Most Loved by our Fam (Our Bestsellers)",
         "title_size": 40,
