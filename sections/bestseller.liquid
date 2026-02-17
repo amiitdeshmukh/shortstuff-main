@@ -403,11 +403,45 @@
 
     <!-- Products -->
     <div class="bs-wrapper">
-      <div class="bs-track" id="bsTrack{{ section.id }}" data-collection="{{ section.settings.collection }}" data-products-count="{{ section.settings.products_to_show }}">
-        <!-- Products will be loaded dynamically -->
-      </div>
-      <div class="bs-loading" style="display: none; text-align: center; padding: 40px; color: #999;">
-        Loading products...
+      <div class="bs-track" id="bsTrack{{ section.id }}">
+        {% assign collection = collections[section.settings.collection] %}
+        {% if collection != blank %}
+          {% for product in collection.products limit: section.settings.products_to_show %}
+            <a href="{{ product.url }}" class="bs-card">
+              <div class="bs-img-wrapper">
+                {% if product.featured_image != blank %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 500 }}"
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    class="bs-img"
+                    width="500"
+                    height="500"
+                    loading="lazy"
+                  >
+                {% else %}
+                  <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
+                    No Image
+                  </div>
+                {% endif %}
+              </div>
+              <div class="bs-info">
+                <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
+                <div class="bs-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="bs-price-sale">{{ product.price | money }}</span>
+                    <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
+                  {% else %}
+                    {{ product.price | money }}
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div style="padding: 40px; text-align: center; color: #999;">
+            Please select a collection in theme settings
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -416,60 +450,6 @@
 <script>
 (function() {
   'use strict';
-
-  // Shopify money formatting function
-  function formatMoney(cents, format) {
-    if (typeof cents === 'string') {
-      cents = cents.replace('.', '');
-    }
-    var value = '';
-    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
-    var formatString = format || '{{ shop.money_format }}';
-
-    function formatWithDelimiters(number, precision, thousands, decimal) {
-      precision = precision || 2;
-      thousands = thousands || ',';
-      decimal = decimal || '.';
-
-      if (isNaN(number) || number == null) {
-        return 0;
-      }
-
-      number = (number / 100.0).toFixed(precision);
-
-      var parts = number.split('.');
-      var dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
-      var centsAmount = parts[1] ? (decimal + parts[1]) : '';
-
-      return dollarsAmount + centsAmount;
-    }
-
-    switch (formatString.match(placeholderRegex)[1]) {
-      case 'amount':
-        value = formatWithDelimiters(cents, 2);
-        break;
-      case 'amount_no_decimals':
-        value = formatWithDelimiters(cents, 0);
-        break;
-      case 'amount_with_comma_separator':
-        value = formatWithDelimiters(cents, 2, '.', ',');
-        break;
-      case 'amount_no_decimals_with_comma_separator':
-        value = formatWithDelimiters(cents, 0, '.', ',');
-        break;
-      case 'amount_with_space_separator':
-        value = formatWithDelimiters(cents, 2, ' ', ',');
-        break;
-      case 'amount_no_decimals_with_space_separator':
-        value = formatWithDelimiters(cents, 0, ' ', ',');
-        break;
-      case 'amount_with_apostrophe_separator':
-        value = formatWithDelimiters(cents, 2, "'", '.');
-        break;
-    }
-
-    return formatString.replace(placeholderRegex, value);
-  }
 
   var sectionId = '{{ section.id }}';
   var trackId = 'bsTrack' + sectionId;
@@ -650,141 +630,14 @@
     }
   }
 
-  // Fetch and display products
-  function loadProducts(filterKeyword) {
-    var track = document.getElementById(trackId);
-    var wrapper = track.parentElement;
-    var loadingDiv = wrapper.querySelector('.bs-loading');
-    
-    if (!track) return;
-
-    var collectionHandle = track.getAttribute('data-collection') || 'all';
-    var productsCount = parseInt(track.getAttribute('data-products-count')) || 10;
-    
-    // Show loading state
-    loadingDiv.style.display = 'block';
-    track.innerHTML = '';
-    
-    // Fetch products from collection
-    var url = '/collections/' + collectionHandle + '/products.json?limit=' + 250;
-    
-    fetch(url)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        var products = data.products || [];
-        var filteredProducts = [];
-        var seenTitles = {};
-        
-        // Filter products by keyword and remove duplicates
-        for (var i = 0; i < products.length && filteredProducts.length < productsCount; i++) {
-          var product = products[i];
-          var titleLower = product.title.toLowerCase();
-          
-          // Check if title matches filter and is unique
-          if (titleLower.includes(filterKeyword.toLowerCase()) && !seenTitles[titleLower]) {
-            filteredProducts.push(product);
-            seenTitles[titleLower] = true;
-          }
-        }
-        
-        // Hide loading
-        loadingDiv.style.display = 'none';
-        
-        // Render products
-        if (filteredProducts.length === 0) {
-          track.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">No products found for this category.</div>';
-          return;
-        }
-        
-        var html = '';
-        filteredProducts.forEach(function(product) {
-          var imageUrl = product.images && product.images[0] ? product.images[0].src : '';
-          var variant = product.variants && product.variants[0] ? product.variants[0] : null;
-          var price = variant ? variant.price : 0;
-          var comparePrice = variant ? variant.compare_at_price : 0;
-          
-          // Use Shopify's money format
-          var moneyFormat = '{{ shop.money_format }}';
-          var priceFormatted = formatMoney(price, moneyFormat);
-          var comparePriceFormatted = comparePrice ? formatMoney(comparePrice, moneyFormat) : '';
-          
-          html += '<a href="/products/' + product.handle + '" class="bs-card" data-product-title="' + product.title.toLowerCase() + '">';
-          html += '  <div class="bs-img-wrapper">';
-          if (imageUrl) {
-            html += '    <img src="' + imageUrl + '" alt="' + product.title + '" width="500" height="500" class="bs-img" loading="lazy">';
-          } else {
-            html += '    <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>';
-          }
-          html += '  </div>';
-          html += '  <div class="bs-info">';
-          html += '    <h3 class="bs-prod-title">' + product.title + '</h3>';
-          html += '    <div class="bs-price">';
-          if (comparePrice && comparePrice > price) {
-            html += '      <span class="bs-price-sale">' + priceFormatted + '</span>';
-            html += '      <span class="bs-price-compare">' + comparePriceFormatted + '</span>';
-          } else {
-            html += priceFormatted;
-          }
-          html += '    </div>';
-          html += '  </div>';
-          html += '</a>';
-        });
-        
-        track.innerHTML = html;
-        
-        // Reset carousel position
-        prevTranslate = 0;
-        currentTranslate = 0;
-        
-        // Re-initialize carousel
-        initBestsellers();
-      })
-      .catch(function(error) {
-        console.error('Error loading products:', error);
-        loadingDiv.style.display = 'none';
-        track.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">Error loading products. Please try again.</div>';
-      });
-  }
-
-  // Category Filter Functionality
-  function initCategoryFilter() {
-    var menuItems = document.querySelectorAll('.bestsellers-section-unique[data-section-id="' + sectionId + '"] .bs-menu-item');
-    
-    if (menuItems.length === 0) return;
-
-    // Load initial category products (first menu item)
-    if (menuItems.length > 0) {
-      var firstFilter = menuItems[0].getAttribute('data-category-filter');
-      loadProducts(firstFilter);
-    }
-
-    menuItems.forEach(function(menuItem) {
-      menuItem.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Update active state
-        menuItems.forEach(function(item) {
-          item.classList.remove('active');
-        });
-        this.classList.add('active');
-
-        // Get filter keyword and load products
-        var filterKeyword = this.getAttribute('data-category-filter');
-        loadProducts(filterKeyword);
-      });
-    });
-  }
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initGlobalListeners();
-      initCategoryFilter();
+      initBestsellers();
     });
   } else {
     initGlobalListeners();
-    initCategoryFilter();
+    initBestsellers();
   }
 })();
 </script>
