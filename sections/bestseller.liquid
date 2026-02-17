@@ -385,8 +385,7 @@
             {% for block in section.blocks %}
               <button type="button"
                       class="bs-menu-item {% if forloop.first %}active{% endif %}"
-                      data-collection-handle="{{ block.settings.collection.handle }}"
-                      data-block-index="{{ forloop.index0 }}"
+                      data-category-index="{{ forloop.index0 }}"
                       {{ block.shopify_attributes }}>
                 {{ block.settings.category_name }}
               </button>
@@ -414,55 +413,11 @@
     <!-- Products -->
     <div class="bs-wrapper">
       <div class="bs-track" id="bsTrack{{ section.id }}">
-        {% if section.blocks.size > 0 %}
-          {% for block in section.blocks %}
-            {% assign current_collection = collections[block.settings.collection] %}
-            <div class="bs-collection-group" 
-                 data-block-index="{{ forloop.index0 }}"
-                 style="display: {% if forloop.first %}contents{% else %}none{% endif %};">
-              {% if current_collection != blank and current_collection.products.size > 0 %}
-                {% for product in current_collection.products limit: section.settings.products_to_show %}
-                  <a href="{{ product.url }}" class="bs-card">
-                    <div class="bs-img-wrapper">
-                      {% if product.featured_image != blank %}
-                        <img
-                          src="{{ product.featured_image | image_url: width: 500 }}"
-                          alt="{{ product.featured_image.alt | default: product.title }}"
-                          class="bs-img"
-                          width="500"
-                          height="500"
-                          loading="lazy"
-                        >
-                      {% else %}
-                        <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
-                          No Image
-                        </div>
-                      {% endif %}
-                    </div>
-                    <div class="bs-info">
-                      <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
-                      <div class="bs-price">
-                        {% if product.compare_at_price > product.price %}
-                          <span class="bs-price-sale">{{ product.price | money }}</span>
-                          <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
-                        {% else %}
-                          {{ product.price | money }}
-                        {% endif %}
-                      </div>
-                    </div>
-                  </a>
-                {% endfor %}
-              {% else %}
-                <div style="padding: 40px; text-align: center; color: #999; width: 100%;">
-                  No products in this collection
-                </div>
-              {% endif %}
-            </div>
-          {% endfor %}
-        {% else %}
-          {% assign collection = collections[section.settings.collection] %}
-          {% if collection != blank %}
-            {% for product in collection.products limit: section.settings.products_to_show %}
+        {% comment %} Zippy Collection (index 0) {% endcomment %}
+        {% assign zippy_collection = collections[section.settings.zippy_collection] %}
+        <div class="bs-collection-group" data-category-index="0" style="display: contents;">
+          {% if zippy_collection != blank and zippy_collection.products.size > 0 %}
+            {% for product in zippy_collection.products limit: section.settings.products_to_show %}
               <a href="{{ product.url }}" class="bs-card">
                 <div class="bs-img-wrapper">
                   {% if product.featured_image != blank %}
@@ -494,11 +449,53 @@
               </a>
             {% endfor %}
           {% else %}
-            <div style="padding: 40px; text-align: center; color: #999;">
-              Please select a collection in theme settings
+            <div style="padding: 40px; text-align: center; color: #999; width: 100%;">
+              No products in Zippy collection. Please select a collection in settings.
             </div>
           {% endif %}
-        {% endif %}
+        </div>
+
+        {% comment %} Paijama Collection (index 1) {% endcomment %}
+        {% assign paijama_collection = collections[section.settings.paijama_collection] %}
+        <div class="bs-collection-group" data-category-index="1" style="display: none;">
+          {% if paijama_collection != blank and paijama_collection.products.size > 0 %}
+            {% for product in paijama_collection.products limit: section.settings.products_to_show %}
+              <a href="{{ product.url }}" class="bs-card">
+                <div class="bs-img-wrapper">
+                  {% if product.featured_image != blank %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 500 }}"
+                      alt="{{ product.featured_image.alt | default: product.title }}"
+                      class="bs-img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div class="bs-img" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
+                      No Image
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="bs-info">
+                  <h3 class="bs-prod-title">{{ product.title | escape }}</h3>
+                  <div class="bs-price">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="bs-price-sale">{{ product.price | money }}</span>
+                      <span class="bs-price-compare">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      {{ product.price | money }}
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          {% else %}
+            <div style="padding: 40px; text-align: center; color: #999; width: 100%;">
+              No products in Paijama collection. Please select a collection in settings.
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
@@ -692,7 +689,7 @@
     if (!section) return;
 
     var menuItems = section.querySelectorAll('.bs-menu-item');
-    var collectionGroups = document.querySelectorAll('.bs-collection-group[data-block-index]');
+    var collectionGroups = document.querySelectorAll('.bs-collection-group[data-category-index]');
     
     if (menuItems.length === 0 || collectionGroups.length === 0) return;
 
@@ -706,8 +703,8 @@
         });
         this.classList.add('active');
 
-        // Get the block index
-        var blockIndex = this.getAttribute('data-block-index');
+        // Get the category index (0 for Zippy, 1 for Paijama)
+        var categoryIndex = this.getAttribute('data-category-index');
         
         // Hide all collection groups
         collectionGroups.forEach(function(group) {
@@ -715,7 +712,7 @@
         });
         
         // Show the selected collection group
-        var activeGroup = document.querySelector('.bs-collection-group[data-block-index="' + blockIndex + '"]');
+        var activeGroup = document.querySelector('.bs-collection-group[data-category-index="' + categoryIndex + '"]');
         if (activeGroup) {
           activeGroup.style.display = 'contents';
         }
@@ -812,8 +809,13 @@
     },
     {
       "type": "collection",
-      "id": "collection",
-      "label": "Select Collection"
+      "id": "zippy_collection",
+      "label": "Zippy Collection"
+    },
+    {
+      "type": "collection",
+      "id": "paijama_collection",
+      "label": "Paijama Collection"
     },
     {
       "type": "range",
@@ -1275,13 +1277,7 @@
           "type": "text",
           "id": "category_name",
           "label": "Category Name",
-          "default": "Pyjamas"
-        },
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection",
-          "info": "Select the collection to display for this category"
+          "default": "Zippy"
         }
       ]
     }
@@ -1293,19 +1289,13 @@
         {
           "type": "category",
           "settings": {
-            "category_name": "Pyjamas"
+            "category_name": "Zippy"
           }
         },
         {
           "type": "category",
           "settings": {
-            "category_name": "Zippies"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "category_name": "Onezie"
+            "category_name": "Paijama"
           }
         }
       ]
