@@ -1,98 +1,192 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .gift-card-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px 20px;
-  min-height: 60vh;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFFCF6;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Coming Soon Styles */
+/* Coming Soon Styles - Exact Figma Design */
 .coming-soon-wrapper {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-}
-
-.coming-soon-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 60px 20px;
+  position: relative;
 }
 
 .coming-soon-title {
   font-family: 'Source Serif 4', serif;
-  font-size: 48px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 16px;
+  font-size: 180px;
+  font-weight: 400;
+  color: #682809;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 141px;
+  letter-spacing: -0.02em;
+}
+
+.coming-soon-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: 432px;
+  width: 100%;
+}
+
+.coming-soon-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .coming-soon-subtitle {
-  font-family: 'Nunito', sans-serif;
-  font-size: 24px;
-  color: #7f8c8d;
-  margin-bottom: 30px;
+  font-family: 'Source Serif 4', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .coming-soon-description {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 16px;
-  color: #95a5a6;
-  max-width: 600px;
-  margin: 0 auto 40px;
-  line-height: 1.6;
+  font-weight: 400;
+  color: #1A1A1A;
+  line-height: 1.4;
+  margin: 0;
 }
 
-.notify-me-button {
-  font-family: 'Nunito', sans-serif;
+.back-to-home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #682809;
+  color: #FFFFFF;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #3498db;
+  font-weight: 700;
+  padding: 14px 50px;
+  border-radius: 50px;
   border: none;
-  border-radius: 30px;
-  padding: 14px 40px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-}
-
-.notify-me-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-}
-
-.back-to-home-link {
-  display: inline-block;
-  margin-top: 30px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 14px;
-  color: #7f8c8d;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.back-to-home-link:hover {
-  color: #2c3e50;
-  text-decoration: underline;
+.back-to-home-button:hover {
+  background-color: #4a1c06;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(104, 40, 9, 0.3);
+}
+
+.giraffe-icon {
+  position: absolute;
+  top: 176px;
+  right: calc(8.33% + 27px);
+  width: 208px;
+  height: 243px;
+}
+
+.giraffe-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .coming-soon-title {
+    font-size: 140px;
+    margin-bottom: 100px;
+  }
+  
+  .giraffe-icon {
+    width: 180px;
+    height: 210px;
+    right: 5%;
+  }
+}
+
+@media (max-width: 990px) {
+  .coming-soon-title {
+    font-size: 100px;
+    margin-bottom: 80px;
+  }
+  
+  .giraffe-icon {
+    width: 150px;
+    height: 175px;
+    top: 120px;
+    right: 3%;
+  }
 }
 
 @media (max-width: 768px) {
   .coming-soon-wrapper {
-    padding: 60px 20px;
-  }
-  
-  .coming-soon-icon {
-    font-size: 60px;
+    padding: 40px 20px;
   }
   
   .coming-soon-title {
-    font-size: 36px;
+    font-size: 72px;
+    margin-bottom: 60px;
+  }
+  
+  .coming-soon-content {
+    max-width: 100%;
+    gap: 30px;
+  }
+  
+  .coming-soon-subtitle {
+    font-size: 24px;
+  }
+  
+  .coming-soon-description {
+    font-size: 14px;
+  }
+  
+  .back-to-home-button {
+    padding: 12px 40px;
+    font-size: 15px;
+  }
+  
+  .giraffe-icon {
+    width: 100px;
+    height: 115px;
+    top: 80px;
+    right: 2%;
+  }
+}
+
+@media (max-width: 480px) {
+  .coming-soon-title {
+    font-size: 48px;
+    margin-bottom: 40px;
+  }
+  
+  .coming-soon-content {
+    gap: 24px;
+  }
+  
+  .coming-soon-text-group {
+    gap: 16px;
   }
   
   .coming-soon-subtitle {
@@ -100,7 +194,19 @@
   }
   
   .coming-soon-description {
+    font-size: 13px;
+  }
+  
+  .back-to-home-button {
+    padding: 10px 30px;
     font-size: 14px;
+  }
+  
+  .giraffe-icon {
+    width: 70px;
+    height: 82px;
+    top: 60px;
+    right: 5px;
   }
 }
 </style>
@@ -148,18 +254,24 @@
     const container = document.getElementById('giftCardContent');
     if (!container) return;
     
+    const giraffeImage = '{{ section.settings.giraffe_icon | image_url: width: 416 }}';
+    const hasGiraffe = '{{ section.settings.giraffe_icon }}' !== '';
+    
     container.innerHTML = `
       <div class="coming-soon-wrapper">
-        <div class="coming-soon-icon">🎁</div>
-        <h1 class="coming-soon-title">${COMING_SOON_TITLE}</h1>
-        <p class="coming-soon-subtitle">Short Stuff Gift Cards</p>
-        <p class="coming-soon-description">
-          ${COMING_SOON_DESCRIPTION}
-        </p>
-        <button class="notify-me-button" onclick="notifyMe()">
-          Notify Me When Available
-        </button>
-        <a href="/" class="back-to-home-link">← Back to Home</a>
+        <h1 class="coming-soon-title">Coming Soon</h1>
+        <div class="coming-soon-content">
+          <div class="coming-soon-text-group">
+            <h2 class="coming-soon-subtitle">Gift cards are launching soon.</h2>
+            <p class="coming-soon-description">Easy to give. Lovely to receive.</p>
+          </div>
+          <a href="/" class="back-to-home-button">Back to Homepage</a>
+        </div>
+        ${hasGiraffe ? `
+        <div class="giraffe-icon">
+          <img src="${giraffeImage}" alt="Giraffe Icon">
+        </div>
+        ` : ''}
       </div>
     `;
   }
@@ -199,22 +311,6 @@
     }
   }
   
-  // Notify me function
-  window.notifyMe = function() {
-    const email = prompt('Enter your email address to get notified:');
-    if (email && email.includes('@')) {
-      // You can integrate with your email marketing service here
-      alert('Thank you! We\'ll notify you when gift cards are available in India.');
-      
-      // Optional: Send to a backend endpoint
-      // fetch('/apps/notify-me', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, product: 'gift-card' })
-      // });
-    }
-  };
-  
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -240,6 +336,16 @@
       "label": "Available in India",
       "default": false,
       "info": "Toggle this ON when gift cards are ready to launch in India"
+    },
+    {
+      "type": "header",
+      "content": "Coming Soon Design"
+    },
+    {
+      "type": "image_picker",
+      "id": "giraffe_icon",
+      "label": "Giraffe Icon Image",
+      "info": "Upload the giraffe PNG icon (recommended: 208x243px)"
     },
     {
       "type": "header",
