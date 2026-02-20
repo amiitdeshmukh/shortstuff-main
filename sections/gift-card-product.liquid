@@ -11,9 +11,13 @@
 
 .gift-card-container {
   width: 100%;
-  height: 75vh;
   background-color: #FFFCF6;
   position: relative;
+}
+
+/* Apply fixed height only when showing Coming Soon */
+.gift-card-container.coming-soon-active {
+  height: 75vh;
   overflow: hidden;
 }
 
@@ -258,6 +262,12 @@
     const container = document.getElementById('giftCardContent');
     if (!container) return;
     
+    // Add class to enable fixed height for Coming Soon page
+    const mainContainer = document.querySelector('.gift-card-container');
+    if (mainContainer) {
+      mainContainer.classList.add('coming-soon-active');
+    }
+    
     const giraffeImage = '{{ section.settings.giraffe_icon | image_url: width: 416 }}';
     const hasGiraffe = '{{ section.settings.giraffe_icon }}' !== '';
     
@@ -285,6 +295,12 @@
   function showGiftCardProduct() {
     const container = document.getElementById('giftCardContent');
     if (!container) return;
+    
+    // Remove fixed height class for product page
+    const mainContainer = document.querySelector('.gift-card-container');
+    if (mainContainer) {
+      mainContainer.classList.remove('coming-soon-active');
+    }
     
     // Load the actual product section
     fetch(window.location.pathname + '?section_id=main-product')
