@@ -30,6 +30,34 @@
     "region_specific_banner_KNze7p": {
       "type": "region-specific-banner",
       "blocks": {
+        "banner_iJYMpA": {
+          "type": "banner",
+          "disabled": true,
+          "settings": {
+            "default_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+            "default_mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+            "default_heading": "",
+            "default_text": "",
+            "default_button_text": "",
+            "default_button_link": "",
+            "default_banner_link": "",
+            "india_heading": "",
+            "india_text": "",
+            "india_button_text": "",
+            "india_button_link": "",
+            "india_banner_link": "",
+            "usa_heading": "",
+            "usa_text": "",
+            "usa_button_text": "",
+            "usa_button_link": "",
+            "usa_banner_link": "",
+            "europe_heading": "",
+            "europe_text": "",
+            "europe_button_text": "",
+            "europe_button_link": "",
+            "europe_banner_link": ""
+          }
+        },
         "banner_wBcgz3": {
           "type": "banner",
           "settings": {
@@ -59,6 +87,7 @@
         }
       },
       "block_order": [
+        "banner_iJYMpA",
         "banner_wBcgz3"
       ],
       "name": "Market-Specific Banner",
