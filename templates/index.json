@@ -274,24 +274,6 @@
     },
     "bestseller_kmqQJb": {
       "type": "bestseller",
-      "blocks": {
-        "category_MQYxbB": {
-          "type": "category",
-          "settings": {
-            "category_name": "Zippies"
-          }
-        },
-        "category_FcM4HU": {
-          "type": "category",
-          "settings": {
-            "category_name": "Pajamas"
-          }
-        }
-      },
-      "block_order": [
-        "category_MQYxbB",
-        "category_FcM4HU"
-      ],
       "name": "Best Sellers",
       "settings": {
         "section_padding_top": 60,
@@ -299,17 +281,13 @@
         "section_padding_top_mobile": 40,
         "section_padding_bottom_mobile": 40,
         "background_color": "#fffcf6",
-        "zippy_collection": "zippies",
-        "paijama_collection": "pj",
+        "collection": "all",
         "products_to_show": 9,
         "title": "Most Loved by our Fam (Our Bestsellers)",
         "title_size": 40,
         "title_color": "#682809",
         "header_margin_bottom": 60,
         "header_margin_bottom_mobile": 40,
-        "show_category_menu": true,
-        "menu_size": 16,
-        "menu_color": "#1a1a1a",
         "show_navigation": true,
         "arrow_size": 48,
         "arrow_bg_color": "#f4b245",
