@@ -11,179 +11,111 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Static Decorative Icons - Fixed Proportional Scaling */
-  .floating-rainbow {
-    position: absolute;
-    top: 15%;
-    left: 5%;
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    z-index: 1;
-  }
-
-  .floating-star {
-    position: absolute;
-    top: 20%;
-    right: 8%;
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    z-index: 1;
-  }
-
-  .floating-icon-1 {
-    position: absolute;
-    top: {{ section.settings.icon1_top_desktop }}%;
-    left: {{ section.settings.icon1_left_desktop }}%;
-    width: {{ section.settings.icon1_size_desktop }}px;
-    height: {{ section.settings.icon1_size_desktop }}px;
-    object-fit: contain;
-    z-index: 1;
-  }
-
-  .floating-icon-2 {
-    position: absolute;
-    top: {{ section.settings.icon2_top_desktop }}%;
-    right: {{ section.settings.icon2_right_desktop }}%;
-    width: {{ section.settings.icon2_size_desktop }}px;
-    height: {{ section.settings.icon2_size_desktop }}px;
-    object-fit: contain;
-    z-index: 1;
-  }
-
-  .floating-icon-3 {
-    position: absolute;
-    bottom: {{ section.settings.icon3_bottom_desktop }}%;
-    left: {{ section.settings.icon3_left_desktop }}%;
-    width: {{ section.settings.icon3_size_desktop }}px;
-    height: {{ section.settings.icon3_size_desktop }}px;
-    object-fit: contain;
-    z-index: 1;
-  }
-
-  /* Section Layout - Simple Grid */
-  .why-choose-us-main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 3rem;
-    grid-template-areas:
-      ". header"
-      "image cards";
+    gap: 4rem;
+    align-items: center;
   }
 
-  /* Header Area */
-  .why-choose-us-header-area {
-    grid-area: header;
-  }
-
-  .why-choose-us-title {
-    font-size: {{ section.settings.title_size }}px;
-    font-weight: bold;
-    color: {{ section.settings.title_color }};
-    margin: 0 0 1rem 0;
-    line-height: 1.2;
-    position: relative;
-  }
-
-  /* Curvy line decoration under heading */
-  .why-choose-us-title::after {
-    content: '';
+  /* Decorative Stars - Top Right */
+  .floating-star-small {
     position: absolute;
-    left: 0;
-    bottom: -{{ section.settings.line_icon_overlap }}px;
-    width: {{ section.settings.line_icon_width }}px;
-    height: {{ section.settings.line_icon_height }}px;
-    background-image: url("{{ section.settings.line_icon | image_url }}");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+    top: 117px;
+    right: 76px;
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
     z-index: 1;
+    transform: rotate(-17deg) scaleY(-1);
   }
 
-  .why-choose-us-title-wrapper {
-    margin-bottom: {{ section.settings.line_icon_spacing }}px;
+  .floating-star-large {
+    position: absolute;
+    top: 157px;
+    right: 144px;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    z-index: 1;
+    transform: rotate(17deg) scaleY(-1);
   }
 
-  .why-choose-us-description {
-    font-size: {{ section.settings.description_size }}px;
-    color: {{ section.settings.text_color }};
-    line-height: 1.6;
-    margin: 0;
+  /* Decorative Rainbow - Top Left */
+  .floating-rainbow {
+    position: absolute;
+    top: 90px;
+    left: -85px;
+    width: 255px;
+    height: 183px;
+    object-fit: contain;
+    z-index: 1;
+    transform: rotate(7.73deg);
   }
 
-  /* Image Area */
+  /* Left Side - Feature Image */
   .why-choose-us-image-area {
-    grid-area: image;
+    position: relative;
   }
 
   .why-choose-us-feature-image {
     width: 100%;
+    max-width: 700px;
     height: auto;
-    border-radius: {{ section.settings.image_border_radius }}px;
+    display: block;
   }
 
-  /* Cards Area */
-  .why-choose-us-cards-area {
-    grid-area: cards;
-  }
-
-  .why-choose-us-features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    height: 100%;
-  }
-
-  .why-choose-us-feature-card {
-    background-color: white;
-    border-radius: {{ section.settings.card_border_radius }}px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .why-choose-us-feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  }
-
-  .why-choose-us-feature-icon {
-    width: auto;
-    height: auto;
-    margin: 0 auto 1.5rem;
-    border-radius: 0;
-    background-color: transparent;
+  /* Right Side - Content */
+  .why-choose-us-content-area {
     display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-left: 2rem;
+  }
+
+  .why-choose-us-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .why-choose-us-title {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 800;
+    color: {{ section.settings.title_color }};
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .why-choose-us-description {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: {{ section.settings.description_size }}px;
+    color: {{ section.settings.text_color }};
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .why-choose-us-button {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    background-color: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    padding: 14px 50px;
+    border-radius: 50px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
   }
 
-  .why-choose-us-feature-icon img {
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
-  }
-
-  .why-choose-us-feature-title {
-    font-size: {{ section.settings.feature_title_size }}px;
-    font-weight: 600;
-    color: {{ section.settings.feature_title_color }};
-    margin-bottom: 1rem;
-    line-height: 1.3;
-  }
-
-  .why-choose-us-feature-description {
-    font-size: {{ section.settings.feature_desc_size }}px;
-    color: {{ section.settings.feature_desc_color }};
-    line-height: 1.5;
+  .why-choose-us-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(104, 40, 9, 0.3);
   }
 
   /* Mobile Responsive */
@@ -194,168 +126,123 @@
     }
 
     .why-choose-us-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
       padding: 0 1rem;
     }
 
-    .why-choose-us-main-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto;
-      gap: 2rem;
-      grid-template-areas:
-        "header"
-        "image"
-        "cards";
-    }
-
-    .why-choose-us-title {
-      font-size: {{ section.settings.title_size | times: 0.8 }}px;
+    .why-choose-us-content-area {
+      padding-left: 0;
       text-align: center;
     }
 
-    .why-choose-us-title::after {
-      left: 50%;
-      transform: translateX(-50%);
-      width: {{ section.settings.line_icon_width | times: 0.8 }}px;
-      height: {{ section.settings.line_icon_height | times: 0.8 }}px;
-      bottom: -{{ section.settings.line_icon_overlap | times: 0.8 }}px;
-    }
-
-    .why-choose-us-title-wrapper {
-      margin-bottom: {{ section.settings.line_icon_spacing | times: 0.7 }}px;
+    .why-choose-us-title {
+      font-size: {{ section.settings.title_size | times: 0.75 }}px;
     }
 
     .why-choose-us-description {
       font-size: {{ section.settings.description_size | times: 0.9 }}px;
-      text-align: center;
     }
 
-    .why-choose-us-features-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+    .why-choose-us-button {
+      margin: 0 auto;
     }
 
-    .why-choose-us-feature-card {
-      padding: 1.5rem;
-    }
-
-    .why-choose-us-feature-icon {
-      font-size: 40px;
-    }
-
-    .why-choose-us-feature-icon img {
-      width: 40px;
-      height: 40px;
-    }
-
-    /* Mobile Static Icon Positions */
+    /* Mobile Decorative Positions */
     .floating-rainbow {
-      width: 80px;
-      height: 80px;
-      top: 5%;
-      left: 2%;
+      width: 150px;
+      height: 108px;
+      top: 50px;
+      left: -50px;
     }
 
-    .floating-star {
-      width: 35px;
-      height: 35px;
-      top: 10%;
-      right: 5%;
+    .floating-star-small {
+      width: 30px;
+      height: 30px;
+      top: 60px;
+      right: 20px;
     }
 
-    .floating-icon-1 {
-      top: {{ section.settings.icon1_top_mobile }}% !important;
-      left: {{ section.settings.icon1_left_mobile }}% !important;
-      width: {{ section.settings.icon1_size_mobile }}px !important;
-      height: {{ section.settings.icon1_size_mobile }}px !important;
-    }
-
-    .floating-icon-2 {
-      top: {{ section.settings.icon2_top_mobile }}% !important;
-      right: {{ section.settings.icon2_right_mobile }}% !important;
-      width: {{ section.settings.icon2_size_mobile }}px !important;
-      height: {{ section.settings.icon2_size_mobile }}px !important;
-    }
-
-    .floating-icon-3 {
-      bottom: {{ section.settings.icon3_bottom_mobile }}% !important;
-      left: {{ section.settings.icon3_left_mobile }}% !important;
-      width: {{ section.settings.icon3_size_mobile }}px !important;
-      height: {{ section.settings.icon3_size_mobile }}px !important;
+    .floating-star-large {
+      width: 48px;
+      height: 48px;
+      top: 90px;
+      right: 60px;
     }
   }
 
   /* Tablet Responsive */
   @media screen and (min-width: 769px) and (max-width: 1024px) {
-    .why-choose-us-main-grid {
-      gap: 2rem;
+    .why-choose-us-container {
+      gap: 3rem;
     }
 
-    .why-choose-us-features-grid {
-      gap: 1rem;
-    }
-
-    .why-choose-us-feature-card {
-      padding: 1.5rem;
+    .why-choose-us-content-area {
+      padding-left: 1rem;
     }
   }
 </style>
 
 <section class="why-choose-us-section">
-  <!-- Static Decorative Icons -->
-  {% if section.settings.floating_icon_1 != blank %}
-    <img
-      src="{{ section.settings.floating_icon_1 | image_url: width: 200 }}"
-      alt="Decoration 1"
-      class="floating-icon-1"
-      loading="lazy"
-    >
-  {% endif %}
-
-  {% if section.settings.floating_icon_2 != blank %}
-    <img
-      src="{{ section.settings.floating_icon_2 | image_url: width: 200 }}"
-      alt="Decoration 2"
-      class="floating-icon-2"
-      loading="lazy"
-    >
-  {% endif %}
-
-  {% if section.settings.floating_icon_3 != blank %}
-    <img
-      src="{{ section.settings.floating_icon_3 | image_url: width: 200 }}"
-      alt="Decoration 3"
-      class="floating-icon-3"
-      loading="lazy"
-    >
-  {% endif %}
-
+  <!-- Decorative Rainbow (Top Left) -->
   {% if section.settings.rainbow_icon != blank %}
     <img
-      src="{{ section.settings.rainbow_icon | image_url: width: 240 }}"
+      src="{{ section.settings.rainbow_icon | image_url: width: 510 }}"
       alt="Rainbow decoration"
       class="floating-rainbow"
+      width="255"
+      height="183"
       loading="lazy"
     >
   {% endif %}
 
+  <!-- Decorative Stars (Top Right) -->
   {% if section.settings.star_icon != blank %}
     <img
-      src="{{ section.settings.star_icon | image_url: width: 100 }}"
-      alt="Star decoration"
-      class="floating-star"
+      src="{{ section.settings.star_icon | image_url: width: 144 }}"
+      alt="Star decoration small"
+      class="floating-star-small"
+      width="45"
+      height="45"
+      loading="lazy"
+    >
+    <img
+      src="{{ section.settings.star_icon | image_url: width: 144 }}"
+      alt="Star decoration large"
+      class="floating-star-large"
+      width="72"
+      height="72"
       loading="lazy"
     >
   {% endif %}
 
   <div class="why-choose-us-container">
-    <!-- Main Grid Layout -->
-    <div class="why-choose-us-main-grid">
-      <!-- Header Area (Top Right) -->
-      <div class="why-choose-us-header-area">
+    <!-- Left Side - Feature Image with Callouts -->
+    <div class="why-choose-us-image-area">
+      {% if section.settings.feature_image != blank %}
+        <img
+          src="{{ section.settings.feature_image | image_url: width: 1400 }}"
+          alt="{{ section.settings.feature_image.alt | default: 'Why choose us - Product features' }}"
+          class="why-choose-us-feature-image"
+          loading="lazy"
+          width="700"
+          height="700"
+        >
+      {% else %}
+        <div
+          class="why-choose-us-feature-image"
+          style="background-color: #f5f5f5; height: 500px; display: flex; align-items: center; justify-content: center; color: #999;"
+        >
+          Upload Feature Image
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Right Side - Content -->
+    <div class="why-choose-us-content-area">
+      <div class="why-choose-us-text-wrapper">
         {% if section.settings.title != blank %}
-          <div class="why-choose-us-title-wrapper">
-            <h2 class="why-choose-us-title">{{ section.settings.title | escape }}</h2>
-          </div>
+          <h2 class="why-choose-us-title">{{ section.settings.title | escape }}</h2>
         {% endif %}
 
         {% if section.settings.description != blank %}
@@ -363,57 +250,11 @@
         {% endif %}
       </div>
 
-      <!-- Image Area (Bottom Left) -->
-      <div class="why-choose-us-image-area">
-        {% if section.settings.feature_image != blank %}
-          <img
-            src="{{ section.settings.feature_image | image_url: width: 800 }}"
-            alt="{{ section.settings.feature_image.alt | default: 'Why choose us feature image' }}"
-            class="why-choose-us-feature-image"
-            loading="lazy"
-            width="800"
-            height="600"
-          >
-        {% else %}
-          <div
-            class="why-choose-us-feature-image"
-            style="background-color: #f5f5f5; height: 400px; display: flex; align-items: center; justify-content: center; color: #999;"
-          >
-            Upload Feature Image
-          </div>
-        {% endif %}
-      </div>
-
-      <!-- Cards Area (Bottom Right) -->
-      <div class="why-choose-us-cards-area">
-        <div class="why-choose-us-features-grid">
-          {% for block in section.blocks %}
-            <div class="why-choose-us-feature-card" {{ block.shopify_attributes }}>
-              {% if block.settings.icon != blank %}
-                <div class="why-choose-us-feature-icon">
-                  <img
-                    src="{{ block.settings.icon | image_url: width: 60 }}"
-                    alt="{{ block.settings.icon.alt | default: block.settings.title }}"
-                    loading="lazy"
-                  >
-                </div>
-              {% else %}
-                <div class="why-choose-us-feature-icon">
-                  <span>{{ block.settings.icon_text | default: '🌟' }}</span>
-                </div>
-              {% endif %}
-
-              {% if block.settings.title != blank %}
-                <h3 class="why-choose-us-feature-title">{{ block.settings.title | escape }}</h3>
-              {% endif %}
-
-              {% if block.settings.description != blank %}
-                <p class="why-choose-us-feature-description">{{ block.settings.description | escape }}</p>
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
-      </div>
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="why-choose-us-button">
+          {{ section.settings.button_text | escape }}
+        </a>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -470,57 +311,7 @@
     },
     {
       "type": "header",
-      "content": "Decorative Line Icon"
-    },
-    {
-      "type": "image_picker",
-      "id": "line_icon",
-      "label": "Curvy Line Icon (SVG/PNG)",
-      "info": "Upload your custom curvy line icon to appear below the heading"
-    },
-    {
-      "type": "range",
-      "id": "line_icon_width",
-      "min": 40,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "label": "Line Icon Width",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "line_icon_height",
-      "min": 8,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Line Icon Height",
-      "default": 12
-    },
-    {
-      "type": "range",
-      "id": "line_icon_overlap",
-      "min": 0,
-      "max": 20,
-      "step": 2,
-      "unit": "px",
-      "label": "Overlap with Heading",
-      "default": 8
-    },
-    {
-      "type": "range",
-      "id": "line_icon_spacing",
-      "min": 5,
-      "max": 40,
-      "step": 5,
-      "unit": "px",
-      "label": "Spacing Below Icon",
-      "default": 15
-    },
-    {
-      "type": "header",
-      "content": "Section Settings"
+      "content": "Background"
     },
     {
       "type": "color",
@@ -530,7 +321,33 @@
     },
     {
       "type": "header",
-      "content": "Content"
+      "content": "Decorative Icons"
+    },
+    {
+      "type": "image_picker",
+      "id": "rainbow_icon",
+      "label": "Rainbow Icon (Top Left)",
+      "info": "Upload rainbow decoration for top left corner"
+    },
+    {
+      "type": "image_picker",
+      "id": "star_icon",
+      "label": "Star Icon (Top Right)",
+      "info": "Upload star decoration for top right corner (will show 2 stars)"
+    },
+    {
+      "type": "header",
+      "content": "Left Side - Feature Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_image",
+      "label": "Feature Image",
+      "info": "Main image with child and callouts (upload complete image with all graphics)"
+    },
+    {
+      "type": "header",
+      "content": "Right Side - Content"
     },
     {
       "type": "text",
@@ -539,30 +356,26 @@
       "default": "Why Choose Us?"
     },
     {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
-      "default": "<p>Discover a world where every little outfit is made with love, care, and purpose.</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "feature_image",
-      "label": "Feature Image",
-      "info": "Main image showing your product or brand"
-    },
-    {
-      "type": "header",
-      "content": "Text Sizes"
-    },
-    {
       "type": "range",
       "id": "title_size",
       "min": 24,
-      "max": 48,
+      "max": 60,
       "step": 2,
       "unit": "px",
       "label": "Title Font Size",
-      "default": 36
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#682809"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Discover a world where every little outfit is made with love, care, and purpose.Discover a world where every little outfit is made with love, care, and purpose. Discover a world where every little outfit is made with love, care, and purpose.</p>"
     },
     {
       "type": "range",
@@ -575,396 +388,42 @@
       "default": 16
     },
     {
-      "type": "range",
-      "id": "feature_title_size",
-      "min": 16,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "Feature Title Font Size",
-      "default": 18
-    },
-    {
-      "type": "range",
-      "id": "feature_desc_size",
-      "min": 13,
-      "max": 18,
-      "step": 1,
-      "unit": "px",
-      "label": "Feature Description Font Size",
-      "default": 14
-    },
-    {
-      "type": "header",
-      "content": "Colors"
-    },
-    {
-      "type": "color",
-      "id": "title_color",
-      "label": "Title Color",
-      "default": "#8B4513"
-    },
-    {
       "type": "color",
       "id": "text_color",
-      "label": "Text Color",
-      "default": "#5D4037"
+      "label": "Description Text Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
     },
     {
       "type": "color",
-      "id": "feature_title_color",
-      "label": "Feature Title Color",
-      "default": "#8B4513"
+      "id": "button_bg_color",
+      "label": "Button Background Color",
+      "default": "#682809"
     },
     {
       "type": "color",
-      "id": "feature_desc_color",
-      "label": "Feature Description Color",
-      "default": "#666666"
-    },
-    {
-      "type": "color",
-      "id": "icon_bg_color",
-      "label": "Icon Background Color",
-      "default": "#F0F8FF"
-    },
-    {
-      "type": "header",
-      "content": "Card Settings"
-    },
-    {
-      "type": "range",
-      "id": "card_border_radius",
-      "min": 0,
-      "max": 30,
-      "step": 2,
-      "unit": "px",
-      "label": "Card Border Radius",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "image_border_radius",
-      "min": 0,
-      "max": 30,
-      "step": 2,
-      "unit": "px",
-      "label": "Image Border Radius",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "icon_size",
-      "min": 40,
-      "max": 80,
-      "step": 5,
-      "unit": "px",
-      "label": "Icon Size",
-      "default": 60
-    },
-    {
-      "type": "header",
-      "content": "Static Decorations"
-    },
-    {
-      "type": "image_picker",
-      "id": "rainbow_icon",
-      "label": "Rainbow Icon (PNG recommended)"
-    },
-    {
-      "type": "image_picker",
-      "id": "star_icon",
-      "label": "Star Icon (PNG recommended)"
-    },
-    {
-      "type": "header",
-      "content": "Icon 1 - Desktop"
-    },
-    {
-      "type": "image_picker",
-      "id": "floating_icon_1",
-      "label": "Upload Icon 1 (PNG recommended)"
-    },
-    {
-      "type": "range",
-      "id": "icon1_size_desktop",
-      "min": 30,
-      "max": 150,
-      "step": 5,
-      "unit": "px",
-      "label": "Desktop Size",
-      "default": 60
-    },
-    {
-      "type": "range",
-      "id": "icon1_top_desktop",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Top Position",
-      "default": 25
-    },
-    {
-      "type": "range",
-      "id": "icon1_left_desktop",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Left Position",
-      "default": 10
-    },
-    {
-      "type": "header",
-      "content": "Icon 1 - Mobile"
-    },
-    {
-      "type": "range",
-      "id": "icon1_size_mobile",
-      "min": 20,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Mobile Size",
-      "default": 40
-    },
-    {
-      "type": "range",
-      "id": "icon1_top_mobile",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Top Position",
-      "default": 15
-    },
-    {
-      "type": "range",
-      "id": "icon1_left_mobile",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Left Position",
-      "default": 6
-    },
-    {
-      "type": "header",
-      "content": "Icon 2 - Desktop"
-    },
-    {
-      "type": "image_picker",
-      "id": "floating_icon_2",
-      "label": "Upload Icon 2 (PNG recommended)"
-    },
-    {
-      "type": "range",
-      "id": "icon2_size_desktop",
-      "min": 30,
-      "max": 150,
-      "step": 5,
-      "unit": "px",
-      "label": "Desktop Size",
-      "default": 70
-    },
-    {
-      "type": "range",
-      "id": "icon2_top_desktop",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Top Position",
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "icon2_right_desktop",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Right Position",
-      "default": 12
-    },
-    {
-      "type": "header",
-      "content": "Icon 2 - Mobile"
-    },
-    {
-      "type": "range",
-      "id": "icon2_size_mobile",
-      "min": 20,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Mobile Size",
-      "default": 45
-    },
-    {
-      "type": "range",
-      "id": "icon2_top_mobile",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Top Position",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "icon2_right_mobile",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Right Position",
-      "default": 8
-    },
-    {
-      "type": "header",
-      "content": "Icon 3 - Desktop"
-    },
-    {
-      "type": "image_picker",
-      "id": "floating_icon_3",
-      "label": "Upload Icon 3 (PNG recommended)"
-    },
-    {
-      "type": "range",
-      "id": "icon3_size_desktop",
-      "min": 30,
-      "max": 150,
-      "step": 5,
-      "unit": "px",
-      "label": "Desktop Size",
-      "default": 55
-    },
-    {
-      "type": "range",
-      "id": "icon3_bottom_desktop",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Bottom Position",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "icon3_left_desktop",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Desktop Left Position",
-      "default": 8
-    },
-    {
-      "type": "header",
-      "content": "Icon 3 - Mobile"
-    },
-    {
-      "type": "range",
-      "id": "icon3_size_mobile",
-      "min": 20,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Mobile Size",
-      "default": 35
-    },
-    {
-      "type": "range",
-      "id": "icon3_bottom_mobile",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Bottom Position",
-      "default": 25
-    },
-    {
-      "type": "range",
-      "id": "icon3_left_mobile",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "%",
-      "label": "Mobile Left Position",
-      "default": 4
-    }
-  ],
-  "blocks": [
-    {
-      "type": "feature",
-      "name": "Feature",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "icon",
-          "label": "Feature Icon (PNG recommended)"
-        },
-        {
-          "type": "text",
-          "id": "icon_text",
-          "label": "Icon Text (if no image)",
-          "default": "🌟",
-          "info": "Used only if no icon image is uploaded"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Feature Title",
-          "default": "Feature Title"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Feature Description",
-          "default": "Feature description goes here"
-        }
-      ]
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
     }
   ],
   "presets": [
     {
-      "name": "Why Choose Us",
-      "blocks": [
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Snuggle Soft Bamboo-Based Fabric",
-            "description": "Gentle Fabric That Feels Like A Cloud Hugged Your Baby - Seriously The Softest Thing They'll Ever Wear",
-            "icon_text": "☁️"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Seasonless & Timeless",
-            "description": "Clothes That Don't Care About Seasons Or Trends - Just Pure Comfort That Is Designed To Be Sibling Friendly Hand-Me-Down",
-            "icon_text": "🌟"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Hypoallergenic & Non-Toxic",
-            "description": "Zero Weird Chemicals, Zero Skin Irritation - Made With Soft, Non-Allergenic Fabric To Give Pure, Safe Comfort For Your Little One",
-            "icon_text": "🧪"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Inclusive In Every Sense",
-            "description": "Clothing That Believes In Gender Neutrality, Loves The Plane And Embraces Sustainability",
-            "icon_text": "🌍"
-          }
-        }
-      ]
+      "name": "Why Choose Us"
     }
   ]
 }
