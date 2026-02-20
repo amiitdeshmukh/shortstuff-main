@@ -11,6 +11,7 @@
   "sections": {
     "banner3_GVygbF": {
       "type": "Banner3",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
         "mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
@@ -32,8 +33,8 @@
         "banner_wBcgz3": {
           "type": "banner",
           "settings": {
-            "default_image": "shopify://shop_images/wtp-print-story-home-page-banner.png",
-            "default_mobile_image": "shopify://shop_images/wtp-print-story-mobile-home-page-banner.png",
+            "default_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+            "default_mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
             "default_heading": "",
             "default_text": "",
             "default_button_text": "",
@@ -55,42 +56,11 @@
             "europe_button_link": "",
             "europe_banner_link": ""
           }
-        },
-        "banner_GVeH6B": {
-          "type": "banner",
-          "settings": {
-            "default_heading": "",
-            "default_text": "",
-            "default_button_text": "",
-            "default_button_link": "",
-            "default_banner_link": "",
-            "india_image": "shopify://shop_images/diwali-print-story-home-page-banner.png",
-            "india_mobile_image": "shopify://shop_images/diwali-print-story-home-page-mobile-banner.png",
-            "india_heading": "",
-            "india_text": "",
-            "india_button_text": "",
-            "india_button_link": "shopify://collections/diwali-dreams",
-            "india_banner_link": "shopify://collections/diwali-dreams",
-            "usa_image": "shopify://shop_images/breast-cancer-awareness.png",
-            "usa_mobile_image": "shopify://shop_images/breast-cancer-awareness-mobile-banner.png",
-            "usa_heading": "",
-            "usa_text": "",
-            "usa_button_text": "",
-            "usa_button_link": "shopify://collections/kellys-courage",
-            "usa_banner_link": "shopify://collections/kellys-courage",
-            "europe_heading": "",
-            "europe_text": "",
-            "europe_button_text": "",
-            "europe_button_link": "",
-            "europe_banner_link": ""
-          }
         }
       },
       "block_order": [
-        "banner_wBcgz3",
-        "banner_GVeH6B"
+        "banner_wBcgz3"
       ],
-      "disabled": true,
       "name": "Market-Specific Banner",
       "settings": {
         "auto_rotate": true,
