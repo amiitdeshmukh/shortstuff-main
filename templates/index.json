@@ -111,12 +111,11 @@
     "region_specific_banner_VNzFnp": {
       "type": "region-specific-banner",
       "blocks": {
-        "banner_ymr3XA": {
+        "banner_HacMqL": {
           "type": "banner",
-          "disabled": true,
           "settings": {
-            "default_image": "shopify://shop_images/christmas-banner.png",
-            "default_mobile_image": "shopify://shop_images/christmas-mobile-banner1.png",
+            "default_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+            "default_mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
             "default_heading": "",
             "default_text": "",
             "default_button_text": "",
@@ -138,100 +137,10 @@
             "europe_button_link": "",
             "europe_banner_link": ""
           }
-        },
-        "banner_BrCceH": {
-          "type": "banner",
-          "settings": {
-            "default_image": "shopify://shop_images/breast-cancer-awareness.png",
-            "default_mobile_image": "shopify://shop_images/breast-cancer-awareness-mobile-banner_1.png",
-            "default_heading": "",
-            "default_text": "",
-            "default_button_text": "",
-            "default_button_link": "shopify://collections/kellys-courage",
-            "default_banner_link": "shopify://collections/kellys-courage",
-            "india_image": "shopify://shop_images/coastal-crew-print-story-home-page-banner_1.png",
-            "india_mobile_image": "shopify://shop_images/coastal-crew-print-story-mobile-home-page-banner.png",
-            "india_heading": "",
-            "india_text": "",
-            "india_button_text": "",
-            "india_button_link": "shopify://collections/coastal-crew",
-            "india_banner_link": "shopify://collections/coastal-crew",
-            "usa_heading": "",
-            "usa_text": "",
-            "usa_button_text": "",
-            "usa_button_link": "",
-            "usa_banner_link": "",
-            "europe_heading": "",
-            "europe_text": "",
-            "europe_button_text": "",
-            "europe_button_link": "",
-            "europe_banner_link": ""
-          }
-        },
-        "banner_ymJUm6": {
-          "type": "banner",
-          "settings": {
-            "default_image": "shopify://shop_images/wtp-print-story-banner_7ef57d26-a6f1-41b6-8b45-110cf7a08b39.png",
-            "default_mobile_image": "shopify://shop_images/wtp-print-story-mobile-banner_a25c8383-fdf5-48b9-ac34-d8d6c23c905f.png",
-            "default_heading": "",
-            "default_text": "",
-            "default_button_text": "",
-            "default_button_link": "shopify://collections/winnie-the-pooh",
-            "default_banner_link": "shopify://collections/winnie-the-pooh",
-            "india_heading": "",
-            "india_text": "",
-            "india_button_text": "",
-            "india_button_link": "",
-            "india_banner_link": "",
-            "usa_heading": "",
-            "usa_text": "",
-            "usa_button_text": "",
-            "usa_button_link": "",
-            "usa_banner_link": "",
-            "europe_heading": "",
-            "europe_text": "",
-            "europe_button_text": "",
-            "europe_button_link": "",
-            "europe_banner_link": ""
-          }
-        },
-        "banner_VFM8Y4": {
-          "type": "banner",
-          "settings": {
-            "default_image": "shopify://shop_images/day-of-the-dead-print-story-home-page-banner.png",
-            "default_mobile_image": "shopify://shop_images/day-of-the-dead-print-story-mobile-home-page-banner.png",
-            "default_heading": "",
-            "default_text": "",
-            "default_button_text": "",
-            "default_button_link": "shopify://collections/winnie-the-pooh",
-            "default_banner_link": "shopify://collections/winnie-the-pooh",
-            "india_image": "shopify://shop_images/Garden-Adventures-print-story-home-page-banner.png",
-            "india_mobile_image": "shopify://shop_images/Garden-Adventures-print-story-home-page-mobile-banner.png",
-            "india_heading": "",
-            "india_text": "",
-            "india_button_text": "",
-            "india_button_link": "shopify://collections/garden-collection",
-            "india_banner_link": "shopify://collections/garden-collection",
-            "usa_image": "shopify://shop_images/day-of-the-dead-print-story-home-page-banner.png",
-            "usa_mobile_image": "shopify://shop_images/day-of-the-dead-print-story-mobile-home-page-banner.png",
-            "usa_heading": "",
-            "usa_text": "",
-            "usa_button_text": "",
-            "usa_button_link": "shopify://collections/day-of-the-dead",
-            "usa_banner_link": "shopify://collections/day-of-the-dead",
-            "europe_heading": "",
-            "europe_text": "",
-            "europe_button_text": "",
-            "europe_button_link": "",
-            "europe_banner_link": ""
-          }
         }
       },
       "block_order": [
-        "banner_ymr3XA",
-        "banner_BrCceH",
-        "banner_ymJUm6",
-        "banner_VFM8Y4"
+        "banner_HacMqL"
       ],
       "name": "Market-Specific Banner",
       "settings": {
