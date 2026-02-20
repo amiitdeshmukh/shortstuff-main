@@ -11,10 +11,9 @@
   "sections": {
     "banner3_GVygbF": {
       "type": "Banner3",
-      "disabled": true,
       "settings": {
-        "image": "shopify://shop_images/Frame_1627.jpg",
-        "mobile_image": "shopify://shop_images/Frame_1627.jpg",
+        "image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+        "mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
         "image_overlay_opacity": 0,
         "image_height": "adapt",
         "text_box_max_width": 600,
@@ -146,6 +145,7 @@
       "block_order": [
         "banner_HacMqL"
       ],
+      "disabled": true,
       "name": "Market-Specific Banner",
       "settings": {
         "auto_rotate": true,
