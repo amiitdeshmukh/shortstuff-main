@@ -1,3 +1,21 @@
+{% comment %}
+  Detect if user is from India using Shopify's localization
+  Check: currency, country, or product availability
+{% endcomment %}
+{% assign is_indian_user = false %}
+{% assign current_country = localization.country.iso_code %}
+{% assign current_currency = cart.currency.iso_code %}
+
+{% if current_country == 'IN' or current_currency == 'INR' %}
+  {% assign is_indian_user = true %}
+{% endif %}
+
+{% comment %}Check if gift card should show "Coming Soon" for India{% endcomment %}
+{% assign show_coming_soon = false %}
+{% if is_indian_user and section.settings.available_in_india == false %}
+  {% assign show_coming_soon = true %}
+{% endif %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet">
@@ -230,96 +248,43 @@
 }
 </style>
 
-<div class="gift-card-container">
-  <!-- Coming Soon Section for India Users -->
-  <div class="gift-card-coming-soon-section" id="comingSoonSection">
-    <div class="coming-soon-wrapper">
-      <h1 class="coming-soon-title">
-        Coming Soon
-        {% if section.settings.giraffe_icon %}
-        <div class="giraffe-icon">
-          <img src="{{ section.settings.giraffe_icon | image_url: width: 416 }}" alt="Giraffe Icon" width="208" height="243" loading="lazy">
+{% if show_coming_soon %}
+  {%- comment -%}Show Coming Soon page for India users{%- endcomment -%}
+  <div class="gift-card-container coming-soon-active">
+    <div class="gift-card-coming-soon-section active">
+      <div class="coming-soon-wrapper">
+        <h1 class="coming-soon-title">
+          Coming Soon
+          {% if section.settings.giraffe_icon %}
+          <div class="giraffe-icon">
+            <img src="{{ section.settings.giraffe_icon | image_url: width: 416 }}" alt="Giraffe Icon" width="208" height="243" loading="lazy">
+          </div>
+          {% endif %}
+        </h1>
+        <div class="coming-soon-content">
+          <div class="coming-soon-text-group">
+            <h2 class="coming-soon-subtitle">Gift cards are launching soon.</h2>
+            <p class="coming-soon-description">Easy to give. Lovely to receive.</p>
+          </div>
+          <a href="{{ routes.root_url }}" class="back-to-home-button">Back to Homepage</a>
         </div>
-        {% endif %}
-      </h1>
-      <div class="coming-soon-content">
-        <div class="coming-soon-text-group">
-          <h2 class="coming-soon-subtitle">Gift cards are launching soon.</h2>
-          <p class="coming-soon-description">Easy to give. Lovely to receive.</p>
-        </div>
-        <a href="{{ routes.root_url }}" class="back-to-home-button">Back to Homepage</a>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-(function() {
-  const GIFT_CARD_AVAILABLE_IN_INDIA = {{ section.settings.available_in_india | default: false }};
-  
-  function isIndianUser() {
-    // Method 1: Check Shopify currency (most reliable for Shopify stores)
-    const shopifyCurrency = window.Shopify?.currency?.active || '{{ cart.currency.iso_code }}';
-    if (shopifyCurrency === 'INR') {
-      return true;
+  {%- comment -%}Hide main product section using inline style{%- endcomment -%}
+  <style>
+    [id*="shopify-section"][id*="main"],
+    [id*="shopify-section"][id*="related"] {
+      display: none !important;
     }
-    
-    // Method 2: Check browser timezone as backup
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (timezone && timezone.includes('Asia/Kolkata')) {
-      return true;
-    }
-    
-    // Method 3: Check if product is unavailable (404 scenario)
-    const productData = {{ product | json }};
-    if (!productData || !productData.id) {
-      return true; // Assume India if product doesn't exist
-    }
-    
-    return false;
-  }
-  
-  function showComingSoon() {
-    const comingSoonSection = document.getElementById('comingSoonSection');
-    const mainContainer = document.querySelector('.gift-card-container');
-    const mainProductSection = document.querySelector('[id^="shopify-section-"][id*="main"]');
-    const relatedProductsSection = document.querySelector('[id^="shopify-section-"][id*="related"]');
-    
-    if (comingSoonSection) comingSoonSection.classList.add('active');
-    if (mainContainer) mainContainer.classList.add('coming-soon-active');
-    
-    // Hide main product and related products sections
-    if (mainProductSection) mainProductSection.style.display = 'none';
-    if (relatedProductsSection) relatedProductsSection.style.display = 'none';
-  }
-  
-  function showGiftCardProduct() {
-    const comingSoonSection = document.getElementById('comingSoonSection');
-    const mainContainer = document.querySelector('.gift-card-container');
-    
-    if (comingSoonSection) comingSoonSection.classList.remove('active');
-    if (mainContainer) mainContainer.classList.remove('coming-soon-active');
-    
-    // Main product section will be visible by default
-  }
-  
-  function init() {
-    // Check if user is from India and gift card not available there yet
-    if (isIndianUser() && !GIFT_CARD_AVAILABLE_IN_INDIA) {
-      showComingSoon();
-    } else {
-      showGiftCardProduct();
-    }
-  }
-  
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
+  </style>
+{% else %}
+  {%- comment -%}Show normal product page for non-India users{%- endcomment -%}
+  <div class="gift-card-container">
+    {%- comment -%}Coming soon section hidden by default{%- endcomment -%}
+  </div>
+{% endif %}
 
 {% schema %}
 {
