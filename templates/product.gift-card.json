@@ -1,1 +1,50 @@
-{"sections":{"main":{"type":"gift-card-product","settings":{}},"related-products":{"type":"related-products","disabled":true,"settings":{"heading":"You may also like","heading_size":"h2","products_to_show":4,"columns_desktop":4,"color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"columns_mobile":"2","padding_top":36,"padding_bottom":28}}},"order":["main","related-products"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gift-card-product",
+      "settings": {
+        "available_in_india": false,
+        "giraffe_icon": "shopify://shop_images/giffy.png",
+        "coming_soon_title": "Coming Soon to India!",
+        "coming_soon_description": "We're excited to announce that our gift cards will be available in India very soon! Stay tuned for updates and be the first to know when they launch."
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "products_limit": 4,
+        "bg_color": "#ffffff",
+        "card_bg_color": "#ffffff",
+        "card_border_color": "#e8e4dc",
+        "card_border_radius": 12,
+        "title_color": "#8b4513",
+        "product_title_size": 14,
+        "product_title_color": "#333333",
+        "product_price_size": 16,
+        "product_price_color": "#d4956b",
+        "button_bg_color": "#ffffff",
+        "button_border_color": "#cccccc",
+        "button_text_color": "#333333",
+        "button_hover_bg": "#f5f5f5",
+        "button_hover_border": "#999999",
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}
