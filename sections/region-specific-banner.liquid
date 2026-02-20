@@ -358,7 +358,7 @@
                 {%- endif -%}
                 
                 {%- if selected_button_text != blank -%}
-                  
+                  <a
                     {% if selected_button_link == blank %}
                       href="#" onclick="return false;"
                     {% else %}
@@ -474,6 +474,16 @@
     }
     
     function showSlide(n, animate = true) {
+      if (totalSlides <= 1) {
+        currentSlide = 0;
+        currentTranslate = 0;
+        prevTranslate = 0;
+        track.style.transition = 'none';
+        setSliderPosition();
+        if (dots[0]) dots[0].classList.add('active');
+        return;
+      }
+
       if (!animate) {
         track.style.transition = 'none';
       } else {
