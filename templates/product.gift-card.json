@@ -9,7 +9,7 @@
  */
 {
   "sections": {
-    "main": {
+    "gift-card-wrapper": {
       "type": "gift-card-product",
       "settings": {
         "available_in_india": false,
@@ -17,6 +17,10 @@
         "coming_soon_title": "Coming Soon to India!",
         "coming_soon_description": "We're excited to announce that our gift cards will be available in India very soon! Stay tuned for updates and be the first to know when they launch."
       }
+    },
+    "main": {
+      "type": "main-product",
+      "settings": {}
     },
     "related-products": {
       "type": "related-products",
@@ -44,6 +48,7 @@
     }
   },
   "order": [
+    "gift-card-wrapper",
     "main",
     "related-products"
   ]
