@@ -3666,6 +3666,7 @@ details-disclosure > details {
 
 /* For all screen */
 
+/* Global heading font override - applies to all heading elements and common heading classes */
 h1,
 h2,
 h3,
@@ -3682,8 +3683,12 @@ h6,
 .banner__heading,
 .rich-text__heading,
 .title,
-.main-page-title {
-  font-family: "Source Serif 4", var(--font-heading-family), serif;
+.main-page-title,
+.bs-title,
+.accordion__title,
+[class*="__title"],
+[class*="-title"]:not([class*="product-title"]):not([class*="prod-title"]) {
+  font-family: "Source Serif 4", var(--font-heading-family), serif !important;
 }
 .color-scheme-5 {
     background: url(https://cdn.shopify.com/s/files/1/0720/1249/7144/files/Gradients_3.png?v=1732514233);
