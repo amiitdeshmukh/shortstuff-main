@@ -37,6 +37,8 @@
   line-height: 1;
   margin-bottom: 141px;
   letter-spacing: -0.02em;
+  position: relative;
+  display: inline-block;
 }
 
 .coming-soon-content {
@@ -99,10 +101,11 @@
 
 .giraffe-icon {
   position: absolute;
-  top: 176px;
-  right: calc(8.33% + 27px);
+  top: -30px;
+  right: -120px;
   width: 208px;
   height: 243px;
+  z-index: 10;
 }
 
 .giraffe-icon img {
@@ -121,7 +124,8 @@
   .giraffe-icon {
     width: 180px;
     height: 210px;
-    right: 5%;
+    right: -100px;
+    top: -25px;
   }
 }
 
@@ -134,8 +138,8 @@
   .giraffe-icon {
     width: 150px;
     height: 175px;
-    top: 120px;
-    right: 3%;
+    right: -80px;
+    top: -20px;
   }
 }
 
@@ -170,8 +174,8 @@
   .giraffe-icon {
     width: 100px;
     height: 115px;
-    top: 80px;
-    right: 2%;
+    right: -50px;
+    top: -15px;
   }
 }
 
@@ -205,8 +209,8 @@
   .giraffe-icon {
     width: 70px;
     height: 82px;
-    top: 60px;
-    right: 5px;
+    right: -35px;
+    top: -10px;
   }
 }
 </style>
@@ -259,7 +263,14 @@
     
     container.innerHTML = `
       <div class="coming-soon-wrapper">
-        <h1 class="coming-soon-title">Coming Soon</h1>
+        <h1 class="coming-soon-title">
+          Coming Soon
+          ${hasGiraffe ? `
+          <div class="giraffe-icon">
+            <img src="${giraffeImage}" alt="Giraffe Icon">
+          </div>
+          ` : ''}
+        </h1>
         <div class="coming-soon-content">
           <div class="coming-soon-text-group">
             <h2 class="coming-soon-subtitle">Gift cards are launching soon.</h2>
@@ -267,11 +278,6 @@
           </div>
           <a href="/" class="back-to-home-button">Back to Homepage</a>
         </div>
-        ${hasGiraffe ? `
-        <div class="giraffe-icon">
-          <img src="${giraffeImage}" alt="Giraffe Icon">
-        </div>
-        ` : ''}
       </div>
     `;
   }
