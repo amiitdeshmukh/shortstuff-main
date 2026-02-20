@@ -1314,7 +1314,7 @@ button.shopify-payment-button__button--unbranded {
   z-index: 1;
   border-radius: var(--buttons-radius);
   box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
-      #f5b345, var(--border-opacity)),
+      rgba(245, 179, 69, var(--border-opacity)),
     0 0 0 var(--buttons-border-width) rgba(var(--color-button), var(--alpha-button-background));
   transition: box-shadow var(--duration-short) ease;
 }
@@ -1325,7 +1325,7 @@ button.shopify-payment-button__button--unbranded {
 .shopify-payment-button__button--unbranded:hover::after {
   --border-offset: 1.3px;
   box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
-      #f5b345, var(--border-opacity)),
+      rgba(245, 179, 69, var(--border-opacity)),
     0 0 0 calc(var(--buttons-border-width) + 1px) rgba(var(--color-button), var(--alpha-button-background));
 }
 
@@ -3666,10 +3666,25 @@ details-disclosure > details {
 
 /* For all screen */
 
-/* h1, h2, h3, h4, h5, .h0, .h1, .h2, .h3, .h4, .h5 {
-    font-family: "Source Serif 4", serif;
-    font-weight: 600;
-} */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h0,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.banner__heading,
+.rich-text__heading,
+.title,
+.main-page-title {
+  font-family: "Source Serif 4", var(--font-heading-family), serif;
+}
 .color-scheme-5 {
     background: url(https://cdn.shopify.com/s/files/1/0720/1249/7144/files/Gradients_3.png?v=1732514233);
 }
