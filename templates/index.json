@@ -654,97 +654,26 @@
     },
     "why_choose_us_37iQwa": {
       "type": "why-choose-us",
-      "blocks": {
-        "feature_EiBLwJ": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/Isolation_Mode_4.svg",
-            "icon_text": "☁️",
-            "title": "Snuggle Soft Bamboo-Based Fabric",
-            "description": "Gentle Fabric That Feels Like A Cloud Hugged Your Baby - Seriously The Softest Thing They'll Ever Wear"
-          }
-        },
-        "feature_cMkRKC": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/Isolation_Mode_5.svg",
-            "icon_text": "🌟",
-            "title": "Seasonless & Timeless",
-            "description": "Clothes That Don't Care About Seasons Or Trends - Just Pure Comfort That Is Designed To Be Sibling Friendly Hand-Me-Down"
-          }
-        },
-        "feature_QPjeDz": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/Isolation_Mode_6.svg",
-            "icon_text": "🧪",
-            "title": "Hypoallergenic & Non-Toxic",
-            "description": "Zero Weird Chemicals, Zero Skin Irritation - Made With Soft, Non-Allergenic Fabric To Give Pure, Safe Comfort For Your Little One"
-          }
-        },
-        "feature_DEfppz": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/Isolation_Mode_7.svg",
-            "icon_text": "🌍",
-            "title": "Inclusive In Every Sense",
-            "description": "Clothing That Believes In Gender Neutrality, Loves The Plane And Embraces Sustainability"
-          }
-        }
-      },
-      "block_order": [
-        "feature_EiBLwJ",
-        "feature_cMkRKC",
-        "feature_QPjeDz",
-        "feature_DEfppz"
-      ],
       "name": "Why Choose Us",
       "settings": {
         "padding_top": 80,
         "padding_bottom": 80,
         "padding_top_mobile": 60,
         "padding_bottom_mobile": 60,
-        "line_icon": "shopify://shop_images/Hand_Drawn_Lines.svg",
-        "line_icon_width": 80,
-        "line_icon_height": 34,
-        "line_icon_overlap": 12,
-        "line_icon_spacing": 15,
         "background_color": "#fffcf6",
+        "rainbow_icon": "shopify://shop_images/rainbow.png",
+        "star_icon": "shopify://shop_images/Iconography_star_4.png",
+        "feature_image": "shopify://shop_images/banner-6-1_1_f2918364-7342-41db-835b-79fe04258af8.png",
         "title": "Why Choose Us?",
-        "description": "<p>Discover a world where every little outfit is made with love, care, and purpose.</p>",
-        "feature_image": "shopify://shop_images/Rectangle_212.png",
         "title_size": 36,
-        "description_size": 16,
-        "feature_title_size": 18,
-        "feature_desc_size": 14,
         "title_color": "#8b4513",
+        "description": "<p>Discover a world where every little outfit is made with love, <br/>care, and purpose.Discover a world where every little outfit is made with love, care, and purpose. Discover a world where every little outfit is made with love, care, and purpose.</p>",
+        "description_size": 16,
         "text_color": "#5d4037",
-        "feature_title_color": "#8b4513",
-        "feature_desc_color": "#666666",
-        "icon_bg_color": "#334fb4",
-        "card_border_radius": 16,
-        "image_border_radius": 20,
-        "icon_size": 65,
-        "floating_icon_1": "shopify://shop_images/Isolation_Mode_12.png",
-        "icon1_size_desktop": 150,
-        "icon1_top_desktop": 5,
-        "icon1_left_desktop": 10,
-        "icon1_size_mobile": 80,
-        "icon1_top_mobile": 0,
-        "icon1_left_mobile": 1,
-        "floating_icon_2": "shopify://shop_images/Iconography_star_1_1.png",
-        "icon2_size_desktop": 45,
-        "icon2_top_desktop": 6,
-        "icon2_right_desktop": 8,
-        "icon2_size_mobile": 45,
-        "icon2_top_mobile": 3,
-        "icon2_right_mobile": 4,
-        "icon3_size_desktop": 55,
-        "icon3_bottom_desktop": 20,
-        "icon3_left_desktop": 8,
-        "icon3_size_mobile": 35,
-        "icon3_bottom_mobile": 25,
-        "icon3_left_mobile": 4
+        "button_text": "Shop Now",
+        "button_link": "shopify://collections",
+        "button_bg_color": "#682809",
+        "button_text_color": "#ffffff"
       }
     },
     "banner2_bkmqQU": {
