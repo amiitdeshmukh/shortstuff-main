@@ -85,7 +85,7 @@
           "type": "banner",
           "settings": {
             "default_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
-            "default_mobile_image": "shopify://shop_images/2b7294ac750ffbbc50377ffd4d6dec0814b98c47.png",
+            "default_mobile_image": "shopify://shop_images/mobile-banner.png",
             "default_heading": "",
             "default_text": "",
             "default_button_text": "",
